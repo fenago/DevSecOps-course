@@ -2,72 +2,12 @@
 Web Application Security Testing
 ================================
 
-In this lab, we will use an online shopping site, Hackazon, to
-demonstrate how to achieve automated web security testing. The key
-challenge in automating web application testing is walking through the
-UI business flow while doing a security inspection; for example, using
-automated testing to look at user sign-in/sign-out, or to add items to
-shopping carts while scanning for potential **cross-site scripting**
-(**XSS**) injection vulnerabilities for every data input. Tackling this
-challenge requires not only security scanning but also web UI
-automation. We will be using security tools, such as ZAP, and also web
-UI automation frameworks, such as Selenium and Robot Framework. Using
-both of these tools can effectively improve your security testing
-coverage. We will share some tips and tools to make web automation
-easier.
-
 In this lab, we will cover the following topics:
 
--   Online shopping site for automated security inspection
 -   Case 1---web security testing using the ZAP REST API
 -   Case 2---full automation with CURL and the ZAP daemon
 -   Case 3---automated security testing for the user registration flow
     using Selenium
-
-
-Case study -- online shopping site for automated security inspection
-====================================================================
-
-We will be using the vulnerable website Hackazon to demonstrate
-automation security testing techniques:
-<http://hackazon.webscantest.com/>. We will be using three cases to
-explore the testing scenario and automation techniques, which are listed
-in the following table:
-
-+-----------------------+-----------------------+-----------------------+
-| **Case scenario**     | **Security testing    | **Security automation |
-|                       | objective**           | techniques**          |
-+-----------------------+-----------------------+-----------------------+
-| *Case 1---web         | General web security  | -   ZAP active        |
-| security testing      | assessments           |     scanning mode     |
-| using the ZAP REST    |                       | -   Use of the ZAP    |
-| API*                  |                       |     REST API          |
-+-----------------------+-----------------------+-----------------------+
-| *Case 2---full        | -   Running ZAP in    | ---                   |
-| automation with CURL  |     daemon mode       |                       |
-| and the ZAP daemon*   | -   Automating the    |                       |
-|                       |     ZAP REST API and  |                       |
-|                       |     CURL              |                       |
-+-----------------------+-----------------------+-----------------------+
-| *Case 3---automated   | Security assessments  | -   ZAP security      |
-| security testing for  | for the user          |     assessments with  |
-| the user registration | registration flow     |     proxy mode        |
-| flow*                 |                       | -   Selenium web UI   |
-|                       |                       |     automation        |
-|                       |                       | -   ZAP with CURL     |
-|                       |                       |     REST API          |
-|                       |                       |     operations        |
-+-----------------------+-----------------------+-----------------------+
-
-
-
-
-
-
-
-
-
-
 
 
 Case 1 -- web security testing using the ZAP REST API
@@ -111,7 +51,7 @@ Here is the command to execute the spider scan by [CURL]:
 
 
 ```
-$ curl   "http://localhost:8090/JSON/spider/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://hackazon.webscantest.com&maxChildren=&recurse=&contextName=&subtreeOnly="
+curl   "http://localhost:8090/JSON/spider/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://hackazon.webscantest.com&maxChildren=&recurse=&contextName=&subtreeOnly="
 ```
 
 
@@ -165,7 +105,7 @@ Here is the command to trigger the active scan with [CURL]:
 
 
 ```
-$ curl     "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://hackazon.webscantest.com&recurse=&inScopeOnly=&scanPolicyName=&method=&postData=&contextId="
+curl     "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://hackazon.webscantest.com&recurse=&inScopeOnly=&scanPolicyName=&method=&postData=&contextId="
 ```
 
 
@@ -202,7 +142,7 @@ HTML:
 
 
 ```
-$ curl  "http://localhost:8090/JSON/ascan/view/status/"
+curl  "http://localhost:8090/JSON/ascan/view/status/"
 ```
 
 
@@ -211,7 +151,7 @@ format:
 
 
 ```
-$ curl  "http://localhost:8090/JSON/ascan/view/status/?zapapiformat=JSON&formMethod=GET&scanId="
+curl  "http://localhost:8090/JSON/ascan/view/status/?zapapiformat=JSON&formMethod=GET&scanId="
 ```
 
 
@@ -225,7 +165,7 @@ the REST APIs, as follows:
 
 
 ```
-$ CURL  http://localhost:8090/HTML/core/view/alerts/ 
+CURL  http://localhost:8090/HTML/core/view/alerts/ 
 ```
 
 
@@ -234,7 +174,7 @@ Alternatively, the HTML report can be generated by exporting to
 
 
 ```
-$ curl    "http://127.0.0.1:8090/OTHER/core/other/htmlreport/?formMethod=GET" > ZAP_Report.HTML
+curl    "http://127.0.0.1:8090/OTHER/core/other/htmlreport/?formMethod=GET" > ZAP_Report.HTML
 ```
 
 
@@ -269,7 +209,7 @@ For Windows, execute the following:
 
 
 ```
-$ ZAP.bat -daemon
+ZAP.bat -daemon
 ```
 
 
@@ -277,7 +217,7 @@ For Linux, execute the following:
 
 
 ```
-$ ZAP.sh  -daemon
+ZAP.sh  -daemon
 ```
 
 
@@ -297,7 +237,7 @@ running normally:
 
 
 ```
-$ Curl   http://localhost:8090/
+Curl   http://localhost:8090/
 ```
 
 
@@ -357,7 +297,7 @@ CURL "http://127.0.0.1:8090/OTHER/core/other/htmlreport/?formMethod=GET" > ZAP_R
 
 echo shutdown the ZAP
 
-CURL “http://localhost:8090/JSON/core/action/shutdown/?zapapiformat=JSON&formMethod=GET”
+CURL "http://localhost:8090/JSON/core/action/shutdown/?zapapiformat=JSON&formMethod=GET"
 
 
 ```
@@ -438,7 +378,7 @@ implementation much easier:
 
 
 ```
-$ git clone https://github.com/seleniumbase/SeleniumBase.git
+git clone https://github.com/seleniumbase/SeleniumBase.git
 $ pip install -U -r requirements.txt
 $ python setup.py install
 ```
@@ -449,7 +389,7 @@ installed, as follows:
 
 
 ```
-$ seleniumbase install chromedriver
+seleniumbase install chromedriver
 ```
 
 
@@ -462,7 +402,7 @@ Execute the following command to launch the ZAP on port [8090]:
 
 
 ```
-$ ZAP   -port  8090
+ZAP   -port  8090
 ```
 
 
@@ -476,7 +416,7 @@ and launch the Chrome browser with the local proxy to the running ZAP:
 
 
 ```
-$ pytest  userregistration_SB.py   --browser=chrome   --proxy=127.0.0.1:8090
+pytest  userregistration_SB.py   --browser=chrome   --proxy=127.0.0.1:8090
 ```
 
 
@@ -529,7 +469,7 @@ identified URLs, as follows:
 
 
 ```
-$ CURL "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://hackazon.webscantest.com&recurse=&inScopeOnly=&scanPolicyName=&method=&postData=&contextId="
+CURL "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://hackazon.webscantest.com&recurse=&inScopeOnly=&scanPolicyName=&method=&postData=&contextId="
 ```
 
 
@@ -544,7 +484,7 @@ RESTful API will generate the report in JSON format:
 
 
 ```
-$ CURL "http://localhost:8090/JSON/core/view/alerts"
+CURL "http://localhost:8090/JSON/core/view/alerts"
 ```
 
 
@@ -552,7 +492,7 @@ The following RESTful API will generate the report in HTML format:
 
 
 ```
-$ CURL "http://localhost:8090/HTML/core/view/alerts"
+CURL "http://localhost:8090/HTML/core/view/alerts"
 ```
 
 
@@ -568,7 +508,7 @@ Execute the BAT script, \"Auto\_ZAP\_UserRegistration.BAT\" on Windows:
 
 
 ```
-$ ZAP -port 8090
+ZAP -port 8090
 
 $ pytest UserRegistration.py --browser=chrome --proxy=127.0.0.1:8090
 
@@ -578,12 +518,8 @@ $ CURL "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMeth
 
 $ timeout /T 30
 
-$ Curl “http://localhost:8090/HTML/core/view/alerts” > UserRegisterResult.html
+$ Curl "http://localhost:8090/HTML/core/view/alerts" > UserRegisterResult.html
 ```
-
-
-
-
 
 
 
@@ -591,12 +527,7 @@ $ Curl “http://localhost:8090/HTML/core/view/alerts” > UserRegisterResult.ht
 Summary
 =======
 
-In this lab, we used an online shopping platform to perform web
-security testing using ZAP. Two main approaches were introduced. The
-first was using ZAP for web security scanning, which was automated by a
-REST API or CLI. The other approach was the integration of ZAP and
-Selenium to review security issues during the user registration flow.
-Let\'s review the key learning objectives of each case.
+In this lab, we performed web security testing using ZAP. ZAP was used for web security scanning, which was automated by a REST API or CLI.
 
 The purpose of case 1 was to demonstrate how to automate the ZAP spider
 scan by using a REST API and CURL.
@@ -611,71 +542,7 @@ scanning include the following:
 4.  Check status and wait for the active scan to finish
 5.  Shut down the ZAP daemon
 
-Case 3 looked at automated security testing for the user registration
-flow, showing how ZAP and Selenium can be integrated. We used Selenium
-to guide ZAP for the registration UI flow.
 
-These three cases demonstrated different automation approaches to web
+These cases demonstrated different automation approaches to web
 security scanning. In the next lab, we will discuss different
 automation approaches to Android security testing.
-
-
-
-
-
-
-
-
-
-
-
-
-Questions
-=========
-
-1.  What\'s the typical order of a ZAP scan?
-    1.  Spider scan → Active scan → Alerts → Shutdown
-    2.  Active Scan → Spider Scan → Alerts → Shutdown
-    3.  Active scan → Alerts → Shutdown
-2.  In ZAP, what\'s the key difference between a spider scan and an
-    active scan?
-    1.  A spider scan involves monitoring security issues in passive
-        mode
-    2.  An active scan will send malicious requests
-    3.  An active scan does specific security testing based on the scan
-        policy
-    4.  All of the above
-
-
-3.  Which automation framework cannot be used to automate the user
-    registration flow?
-    1.  Selenium
-    2.  SeleniumBase
-    3.  All of the above
-4.  What can be required to execute the user registration flow
-    automation?
-    1.  Selenium
-    2.  Selenium ChromeDriver
-    3.  All of the above
-
-
-
-
-
-
-
-
-
-
-
-
-Further reading
-===============
-
--   **ZAPping the Top 10**:
-    <https://www.owasp.org/index.php/ZAPpingTheTop10>
--   **SeleniumBase**: <https://github.com/seleniumbase/SeleniumBase>
--   **Katalon Automation Recorder**:
-    <https://www.katalon.com/resources-center/blog/katalon-automation-recorder/>
--   **ZAP Blog**: <http://zaproxy.blogspot.com/>
--   **ZAP Proxy**: <https://github.com/zaproxy>

@@ -38,24 +38,15 @@ the security results by
 
 
 
-Step 1 -- installation of ZAP-CLI
-=================================
-
-Assuming you have installed OWASP ZAP, the installation of the ZAP-CLI
-can be easily done with this command:
-
-
-```
-$ pip install --upgrade zapcli
-```
-
+Step 1 -- Using ZAP-CLI
+=======================
 
 To ensure the success of the ZAP-CLI installation, you may try this
 command with help options:
 
 
 ```
-$ zap-cli quick-scan --help
+zap-cli quick-scan --help
 ```
 
 
@@ -73,7 +64,7 @@ the API Key] checkbox under the OWASP UI menu,
 
 
 ```
-$ zap-cli quick-scan -s xss,sqli --spider -r http://nodegoat.herokuapp.com/
+zap-cli quick-scan -s xss,sqli --spider -r http://nodegoat.herokuapp.com/
 ```
 
 
@@ -89,7 +80,7 @@ to use [alerts] to show a summary list of the security issues:
 
 
 ```
-$ zap-cli alerts
+zap-cli alerts
 ```
 
 
@@ -100,7 +91,7 @@ reporting tools, which we will introduce in Lab 15,
 
 
 ```
-$ zap-cli report -o   ZAP_Report.html  -f html
+zap-cli report -o   ZAP_Report.html  -f html
 ```
 
 
@@ -108,7 +99,7 @@ To generate the XML format report, execute this command:
 
 
 ```
-$ zap-cli report -o ZAP_Report.xml -f xml
+zap-cli report -o ZAP_Report.xml -f xml
 ```
 
 
@@ -118,16 +109,6 @@ ZAP RESTful API is provided by default in ZAP, while the ZAP-CLI will
 require to install [zapcli]. If you only need basic web scan
 operations, the ZAP-CLI may fit your needs. However, if you need more
 control over ZAP, the ZAP RESTful API will be recommended.
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -145,8 +126,7 @@ security smoke test of every authenticated page.
 Here are the UI steps automated by Selenium:
 
 -   Visit the sign-in page: <http://nodegoat.herokuapp.com/login>
--   Sign in with username = [user1] and password =
-    [User1\_123]
+-   Sign in with username = **user1** and password = **User1_123**
 -   Visit the contributions page after sign-in
 -   Visit the allocation page
 -   Visit the memos page
@@ -168,7 +148,7 @@ Please ensure the Firefox web driver (geckodriver) is installed, which
 can be found here: <https://github.com/mozilla/geckodriver/releases>.
 
 This sample code shows a Selenium/Python script used to log in to
-NodeGoat with [user1/user1\_123] credentials:
+NodeGoat with **user1/User1_123** credentials:
 
 
 ```
@@ -278,7 +258,7 @@ seleniumbase]:
 
 
 ```
-seleniumbase    convert     NodeGoat_SignIn.py
+seleniumbase convert NodeGoat_SignIn.py
 ```
 
 
@@ -310,7 +290,7 @@ followings:
 
 
 ```
-$ CURL "http://127.0.0.1:8090/OTHER/core/other/htmlreport/?formMethod=GET" > ZAP_Report.HTML
+CURL "http://127.0.0.1:8090/OTHER/core/other/htmlreport/?formMethod=GET" > ZAP_Report.HTML
 ```
 
 
@@ -319,14 +299,8 @@ generated with this command:
 
 
 ```
-$ zap-cli report -o   ZAP_Report.html  -f html
+zap-cli report -o   ZAP_Report.html  -f html
 ```
-
-
-
-
-
-
 
 
 Case 3 -- fuzz XSS and SQLi testing with JMeter
@@ -348,8 +322,7 @@ proxy to the target testing website, NodeGoat.
 
 The testing steps are as follows:
 
-1.  Sign in to NodeGoat with the username [User1] and password
-    [User1\_123]
+1.  Sign in to NodeGoat with the username **User1** and password **User1_123**
 2.  Visit the contributions page
 3.  Visit the allocations page
 4.  Visit the memos page
@@ -375,16 +348,7 @@ Step 1 -- prepare environment
 =============================
 
 To prepare the environment for this security testing scenario, we will
-mainly need JMeter, ZAP, and FuzzDB. This table lists the tools with the
-usage scenario in this security testing:
-
-  ----------- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  **Tools**   **Usage scenario in security testing**
-  JMeter      JMeter will be used to send HTTP requests with injection security payloads.
-  ZAP         ZAP will be running in proxy mode on port [8090], and will analyze security issues with the HTTP traffic.
-  FuzzDB      We will use the FuzzDB command injection payloads for the JMeter. Refer to this for the attack payloads: <https://github.com/fuzzdb-project/fuzzdb/tree/master/attack>.
-  ----------- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+mainly need JMeter, ZAP, and FuzzDB.
 
 
 Step 2 -- define the JMeter scripts
@@ -539,7 +503,7 @@ by using the [-H]:
 
 
 ```
-$ jmeter    -n   -H   localhost -P   8090   -t    NodeGoat.jmx      -l    NodeGoat_result.jtl  -j  NodeGoat_result.log    
+jmeter    -n   -H   localhost -P   8090   -t    NodeGoat.jmx      -l    NodeGoat_result.jtl  -j  NodeGoat_result.log    
 ```
 
 
@@ -557,7 +521,7 @@ followings:
 
 
 ```
-$ CURL "http://127.0.0.1:8090/OTHER/core/other/htmlreport/?formMethod=GET" > ZAP_Report.HTML
+CURL "http://127.0.0.1:8090/OTHER/core/other/htmlreport/?formMethod=GET" > ZAP_Report.HTML
 ```
 
 

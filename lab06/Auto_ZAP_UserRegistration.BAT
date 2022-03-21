@@ -8,4 +8,4 @@ CURL "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMethod
 
  timeout /T 30
 
-Curl “http://localhost:8090/HTML/core/view/alerts” > UserRegisterResult.html
+Curl "http://localhost:8090/HTML/core/view/alerts" > UserRegisterResult.html

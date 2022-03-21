@@ -2,12 +2,7 @@
 BDD Acceptance Security Testing
 ===============================
 
-In this lab, we will discuss the challenges of cross-team
-communication within a large software development team. The team who
-executed the security testing may understand what has been tested and
-how, but other non-technical teams such as product management,
-marketing, or even customers may not understand the context just from
-reading the testing reports. Therefore, we will introduce
+In this lab, we will introduce
 **behavior-driven development** (**BDD**) acceptance testing with
 automation security testing. BDD security testing is introduced to
 improve the communication of the nature of security testing to all
@@ -22,146 +17,6 @@ The following topics are to be covered in this lab:
 -   BDD testing framework
 
 
-Security testing communication
-==============================
-
-Being able to articulate the security testing plan, execution, and
-results in a way that non-security team members can understand is
-critical to the project. This will help stakeholders understand what
-security testing is performed and how. Too many technical and security
-domain-specific terms may result in the security testing being too
-difficult to understand.
-
-For example, the business objective of security is to protect the
-application against injection attacks. However, in the domain of
-security testing, \'injection attacks\' may be specifically described as
-**XML External Entity** (**XXE**) attacks, **Cross-Site Scripting**
-(**XSS**) attacks, command injection, and SQL injection. Use of this
-terminology may cause communication gaps and misunderstanding between
-security and non-security stakeholders.
-
-The following table lists the security business objectives for general
-stakeholders and the corresponding security testing techniques for
-dealing with them:
-
-+-----------------------------------+-----------------------------------+
-| **Security business objective and | **Security testing techniques**   |
-| scenario**                        |                                   |
-+-----------------------------------+-----------------------------------+
-| Web scanning---Executing          | OWASP Top 10 security testing     |
-| automated web application-level   | includes 10 common security       |
-| security testing to identify      | issues such as injection, broken  |
-| vulnerabilities in the web        | authentication, sensitive data    |
-| application                       | exposure, XXE, broken access      |
-|                                   | control, security                 |
-|                                   | misconfiguration, XSS, insecure   |
-|                                   | deserialization, known            |
-|                                   | vulnerabilities, and insufficient |
-|                                   | logging and monitoring.           |
-+-----------------------------------+-----------------------------------+
-| Verifying that the **TLS/SSL**    | The testing of the SSL            |
-| (**Transport Layer                | configuration does not only       |
-| Security/Secure Sockets Layer**)  | include the uses of secure        |
-| configuration of the web server   | protocols and a secure cipher     |
-| is secure                         | suite, but also the following:    |
-|                                   |                                   |
-|                                   | -   Tests for CCS injection       |
-|                                   |     vulnerability                 |
-|                                   | -   Tests for renegotiation       |
-|                                   |     vulnerabilities               |
-|                                   | -   Tests for CRIME vulnerability |
-|                                   | -   Tests for BREACH              |
-|                                   |     vulnerability                 |
-|                                   | -   Tests for POODLE (SSL)        |
-|                                   |     vulnerability                 |
-|                                   | -   Tests for FREAK vulnerability |
-|                                   | -   Tests for BEAST vulnerability |
-|                                   | -   Tests for LOGJAM              |
-|                                   |     vulnerability                 |
-|                                   | -   Tests for DROWN vulnerability |
-+-----------------------------------+-----------------------------------+
-| Verifying that sensitive          | -   Secure communication with TLS |
-| information is transmitted in a   |     v1.2                          |
-| secure manner                     | -   Secure remote connection with |
-|                                   |     SSH v2 instead of Telnet      |
-+-----------------------------------+-----------------------------------+
-
-
-
-
-
-
-
-
-
-
-
-
-What is BDD security testing?
-=============================
-
-**ATDD** stands for **Acceptance Test-Driven Development**, and BDD
-means behavior-driven development**.** In some scenarios, these two
-terms can be interchangeable. The purpose of adopting ATDD or BDD is to
-make security testing more transparent for all project members. The
-security testing results can provide quick feedback on the meeting of
-business objectives, for instance. The other purpose of BDD adoption is
-the provision of dynamic documentation for the whole project cycle,
-since BDD is done with an English-like language that follows the
-**Given, When, Then** (**GWT**) format.
-
-In this course, we introduce the use of Robot Framework and Gauntlt to
-achieve BDD security automation testing. Here is a comparison of these
-two BDD testing frameworks:
-
-+-----------------------+-----------------------+-----------------------+
-|                       | **Robot Framework**   | **Gauntlt**           |
-+-----------------------+-----------------------+-----------------------+
-| **Type**              | ATDD                  | BDD                   |
-+-----------------------+-----------------------+-----------------------+
-| **Script format**     | Keyword-driven        | Scenario-driven       |
-|                       | script:               | script:               |
-|                       |                       |                       |
-|                       | -   [Execute          | -   Given\...         |
-|                       |     command]    | -   When\...          |
-|                       | -   [Create           | -   Then the output   |
-|                       |     session]    |     should\...        |
-|                       | -   [Should not       |                       |
-|                       |     contain]    |                       |
-+-----------------------+-----------------------+-----------------------+
-| **Integration with    | No additional         | Gauntlt requires      |
-| security tools**      | security adapters are | security adapters,    |
-|                       | needed. Robot         | although it provides  |
-|                       | Framework uses one of | a generic             |
-|                       | the following         | command-line adapter  |
-|                       | approaches to         | that can be used for  |
-|                       | communicate with      | most CLI security     |
-|                       | security tools:       | tools                 |
-|                       |                       |                       |
-|                       | -   **command-line    |                       |
-|                       |     interface**       |                       |
-|                       |     (**CLI**):        |                       |
-|                       |     Execute command   |                       |
-|                       | -   REST API:         |                       |
-|                       |     Requests library  |                       |
-+-----------------------+-----------------------+-----------------------+
-| **Popularity**        | Robot Framework is a  | Gauntlt may be new to |
-|                       | widely used           | both the automation   |
-|                       | automation testing    | and security testing  |
-|                       | framework, perhaps    | teams                 |
-|                       | due to ease of use    |                       |
-+-----------------------+-----------------------+-----------------------+
-
-
-
-
-
-
-
-
-
-
-
 
 Adoption of Robot Framework with sqlmap
 =======================================
@@ -173,9 +28,10 @@ bypasses, information leakage, authorization bypasses, and command
 injection. Before integration with Robot Framework, SQL injection
 execution by [sqlmap] will be as follows:
 
+To Do:
 
 ```
-$ python sqlmap.py   -u    "http://demo.testfire.net/"    -- batch    --banner
+python sqlmap.py   -u    "http://demo.testfire.net/"    -- batch    --banner
 ```
 
 
@@ -211,7 +67,7 @@ Python PIP package:
 
 
 ```
-$ python -m pip install robotframework
+python -m pip install robotframework
 ```
 
 
@@ -222,7 +78,7 @@ started by running [ride.py]:
 
 
 ```
-$ pip install robotframework-ride
+pip install robotframework-ride
 ```
 
 
@@ -234,7 +90,7 @@ Once installation of Robot Framework is done, we may install
 
 
 ```
-$ git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
+git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
 ```
 
 
@@ -272,20 +128,10 @@ understandable.
 
 
 
-
-
-
-
-
-
-
-
-
 Testing framework -- Robot Framework with ZAP
 =============================================
 
-In Lab 8, *Infrastructure Security*, we introduced the uses of Gauntlt, the BDD
-security framework. Here we will introduce another BDD automation
+Here we will introduce BDD automation
 testing framework, Robot Framework. The reason that we also introduce
 Robot Framework is that it\'s widely used in automation testing and also
 supports various kinds of testing frameworks, such as Selenium for web
@@ -313,21 +159,7 @@ Step 1 -- environment setup and preparation
 
 In this case, we will launch ZAP as proxy mode with the listening port
 [8090]. We will perform ZAP execution by using Robot Framework to
-send the REST API to ZAP. Refer to the previous section for the
-installation of Robot Framework.
-
-In addition, we will also need the [requests] library to enable
-Robot Framework to send the HTTP requests to ZAP. The requests library
-can be installed as follows:
-
-
-```
-$ pip install -U   requests
-$ pip install -U   robotframework-requests
-```
-
-
-
+send the REST API to ZAP.
 
 Step 2 -- the Robot Framework script for the ZAP spider scan
 ============================================================
@@ -410,7 +242,7 @@ found at the following URL:
 
 
 ```
-$ http://localhost:8090/HTML/core/view/alertsSummary/?zapapiformat=HTML&formMethod=GET
+http://localhost:8090/HTML/core/view/alertsSummary/?zapapiformat=HTML&formMethod=GET
 ```
 
 
@@ -420,8 +252,7 @@ zapcli]:
 
 
 ```
-$ zap-cli report -o   ZAP_Report.html  -f html
-
+zap-cli report -o   ZAP_Report.html  -f html
 ```
 
 
@@ -441,7 +272,7 @@ Execute the following commands under the CLI console:
 
 
 ```
-$ robot    "ZAP RequestsSample.robot"
+robot    "ZAP RequestsSample.robot"
 ```
 
 
@@ -463,16 +294,8 @@ generated under the same folder of the robot script. [output.xml],
 Summary
 =======
 
-In this lab, we mainly discussed how to apply a BDD framework to
-security testing. The security testing process and results can be
-difficult to understand for a non-security team; the adoption of a BDD
-security framework can reduce the communication gap. For example, a
-security team may test for POODLE vulnerability; in business language,
-that would be the verification of the secure communication of TLS.
-
-We introduced two automation frameworks, Robot Framework and Gauntlt.
 Robot Framework uses a keyword-driven approach to define the testing
-steps and Gauntlt uses a GWT approach to define the testing scripts. We
+steps. We
 demonstrated the testing of SQL injection by using [sqlmap], and
 illustrated how Robot Framework can be used to execute [sqlmap] .
 In the Robot Framework script, we use [Execute Command] to execute

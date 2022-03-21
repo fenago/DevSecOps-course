@@ -20,8 +20,6 @@ In this lab, we will cover the following topics:
 -   Managing and presenting test results
 -   Approach 1 -- integrating the tools with RapidScan
 -   Approach 2 -- generating a professional pentest report with Serpico
--   Approach 3 -- security findings management with DefectDojo
-
 
 Managing and presenting test results
 ====================================
@@ -141,7 +139,7 @@ To get the RapidScan script, follow these commands:
 
 
 ```
-$ wget -O rapidscan.py https://raw.githubusercontent.com/skavngr/rapidscan/master/rapidscan.py && chmod +x rapidscan.py
+wget -O rapidscan.py https://raw.githubusercontent.com/skavngr/rapidscan/master/rapidscan.py && chmod +x rapidscan.py
 $ python rapidscan.py  nodegoat.herokuapp.com
 ```
 
@@ -276,7 +274,7 @@ launched with the [start\_serpico.bat] script:
 
 
 ```
-$ cd Serpico
+cd Serpico
 $ start_serpico.bat
 ```
 
@@ -415,173 +413,6 @@ This screenshot shows a sample of a generated report in Word format:
 
 
 
-Serpico Report Sample
-
-
-
-
-
-
-
-
-Approach 3 -- security findings management DefectDojo
-=====================================================
-
-In this approach, we use several security testing tools to do security
-testing with XML outputs. These XML outputs will be imported into a
-defect management service, OWASP DefectDojo in our demonstration. The
-security defect management web service will help to consolidate all the
-testing results in one security dashboard, or even generate a summary
-report. Follow the steps to learn how to apply OWASP DefectDojo to
-manage your security findings.
-
-
-
-Step 1 -- setup the OWASP DefectDojo
-====================================
-
-To set up the OWASP DefectDojo, running the Docker image is suggested.
-Follow these commands to run OWASP DefectDojo. It will run a web service
-on port [8000]:
-
-
-```
-$ docker run -it -p 8000:8000 appsecpipeline/django-defectdojo bash -c "export LOAD_SAMPLE_DATA=True && bash /opt/django-DefectDojo/docker/docker-startup.bash"
-```
-
-
-Once the OWASP defectDojo docker is running, use your browser to
-navigate to [http://localhost:8000] with the default credentials
-(user: [admin], password: [admin]).
-
-In addition, OWASP DefectDojo also provides an online demo. Refer to
-[https://defectdojo.herokuapp.com](https://defectdojo.herokuapp.com/)
-with the default credentials listed here:
-
-  --------------------------- -----------------------------------
-  **Username**                **Password**
-  [admin]               [defectdojo\@demo\#appsec]
-  [product\_manager ]   [defectdojo\@demo\#product]
-  --------------------------- -----------------------------------
-
-
-
-Step 2 -- run security tools to output XMLs
-===========================================
-
-Generally, most security testing tools can output testing results in XML
-or JSON format. In our demonstration, we generate most of the results in
-XML files and import them into OWASP DefectDojo.
-
-This table shows some common security testing tools for how to execute
-the security testing with XML output:
-
-+-----------------------------------+-----------------------------------+
-| **Tools**                         | **Security testing, output format |
-|                                   | and command options**             |
-+-----------------------------------+-----------------------------------+
-| OWASP ZAP                         | Web Security testing with XML     |
-|                                   | output format:                    |
-|                                   |                                   |
-|                                   | [\$ zap-cli quick-scan -s         |
-|                                   | xss,sqli \--spider -r             |
-|                                   | http:                             |
-|                                   | //nodegoat.herokuapp.com/]\ |
-|                                   | [\$ zap-cli report -o             |
-|                                   | ZAP\_Report.xml -f xml]     |
-+-----------------------------------+-----------------------------------+
-| Dependency Check                  | Scan for known vulnerabilities    |
-|                                   | with XML output format:           |
-|                                   |                                   |
-|                                   | [\$ dependency-check.bat          |
-|                                   | \--format XML \--project NodeGoat |
-|                                   | -s d:\\NodeGoat]            |
-+-----------------------------------+-----------------------------------+
-| NMAP                              | Network security scanning with    |
-|                                   | XML output format:                |
-|                                   |                                   |
-|                                   | [\$ nmap -sV -sC                  |
-|                                   | nodegoat.herokuapp.com -oX        |
-|                                   | /tmp                              |
-|                                   | /webmap/NodeGoat\_NMAP.xml] |
-|                                   |                                   |
-|                                   | [\$ nmap -p80 \--script           |
-|                                   | http-stored-xss.nse               |
-|                                   | nodegoat.herokuapp.com]     |
-|                                   |                                   |
-|                                   | [\$ nmap -p80,443 \--script       |
-|                                   | http-slowloris \--max-parallelism |
-|                                   | 500 -Pn                           |
-|                                   | nodegoat.herokuapp.com]     |
-|                                   |                                   |
-|                                   | [\$ nmap -p21, 23,80, 137,138,    |
-|                                   | 443, 445, 1433, 3306, 1521, 3389  |
-|                                   | \--open -Pn n                     |
-|                                   | odegoat.herokuapp.com]      |
-+-----------------------------------+-----------------------------------+
-| Retire                            | Scan for known vulnerabilities of |
-|                                   | JavaScript libraries:             |
-|                                   |                                   |
-|                                   | [\$ retire \--path \\nodegoat     |
-|                                   | \--outputformat json              |
-|                                   | \--colors]                  |
-+-----------------------------------+-----------------------------------+
-
-
-
-Step 3 -- import ZAP findings
-=============================
-
-Once we have done the web security testing by using OWASP ZAP, the
-[ZAP\_Report.xml] file can be imported into OWASP DefectDojo.
-Before we can import the security findings XML file, we need to create a
-product and engagement:
-
--   **Add Product**: OWASP DefectDojo can manage several products
-    (projects). For example, NodeGoat is our product in this case.
--   **Add New Engagement**: Engagement can be every planned security
-    testing cycle. There may be several engagements due to different
-    kinds of security testing tools or several periods of testing.
-
-We will use [Add New Engagement] \| **[Import Scan
-results]** to import the ZAP XML testing results
-[ZAP\_Report.xml]:
-
-
-![](./images/205f8101-2fb0-4943-bc9b-23c296b81d56.png)
-
-
-
-
-DefectDojo with ZAP Import
-
-
-Once the XML import is done, you may review the security findings in the
-web console. If there are several projects or engagements for security
-testing, you will find such a dashboard helpful for the communication
-and presentation of the security status:
-
-
-![](./images/6490183c-4a3c-417e-a455-175b3abc30a5.png)
-
-
-
-Findings in DefectDojo
-
-
-In addition, OWASP defectDojo also includes [Report
-Builder] to generate a PDF document.
-
-
-
-
-
-
-
-
-
-
-
 
 Summary
 =======
@@ -599,79 +430,4 @@ which executes several security testing tools and presents the security
 findings in a console with highlighted colors. Secondly, we also
 introduced the document generator Serpico, which can help to generate
 professional penetration testing documentation, which includes the
-summary, security findings, risk ratings, and mitigations. Finally, we
-applied a reporting management service, which can import all the XML
-testing results and present the findings in one dashboard. We have
-illustrated this by using OWASP DefectDojo.
-
-
-
-
-
-
-
-
-
-
-
-
-Questions
-=========
-
-1.  What should be included in a penetration testing report?
-    1.  Executive summary
-    2.  Statement of methodology
-    3.  Findings
-    4.  All of above
-2.  How does NIST 800-30 categorize risk rating?
-    1.  Impact of Threat vs Threat Likelihood
-    2.  Severity vs Impact
-    3.  Impact vs Mitigation efforts
-    4.  Severity vs Asset Value
-3.  What is the common report format that can be imported into the
-    reporting service?
-    1.  HTML
-    2.  XML
-    3.  CSV
-    4.  DOC
-4.  Which one of these is not used for web security testing?
-    1.  [nmap]
-    2.  [uniscan]
-    3.  [dirb]
-    4.  [IDA]
-5.  Which one is not used for network scanning?
-    1.  [nmap]
-    2.  [xsser]
-    3.  [dnsenum]
-    4.  [dnsmap]
-
-
-
-
-
-
-
-
-
-
-
-
-Further reading
-===============
-
--   **Web security scanner Arachni**:
-    <https://github.com/Arachni/arachni>
--   **Arachni**: <https://github.com/Arachni/arachni/wiki/Installation>
--   **Archerysec**: <https://github.com/archerysec/archerysec>
--   **DefectDojo Demo Site**:
-    [https://defectdojo.herokuapp.com](https://defectdojo.herokuapp.com/)
-    ([admin / defectdojo\@demo\#appsec])
--   **Archerysec Demo Site**:
-    <https://archerysec-test.herokuapp.com/webscanners> (**Username**:
-    [archerysec], **Password**: [archerysec\@archerysec])
--   **Serpico Report templates**:
-    <https://github.com/SerpicoProject/Serpico/tree/master/templates>
--   **PCI Penetration Testing Guidance**:
-    <https://www.pcisecuritystandards.org/documents/Penetration_Testing_Guidance_March_2015.pdf>
--   **OWASP DefectDojo**:
-    <https://github.com/DefectDojo/django-DefectDojo>
+summary, security findings, risk ratings, and mitigations.

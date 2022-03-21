@@ -2,113 +2,11 @@
 Security API and Fuzz Testing
 =============================
 
-n After the privacy and sensitive information security inspection, we
-will now explore API and fuzz testing. As the cloud software release can
-be on an API-level basis, there can be hundreds of APIs released at a
-time. The software development team will definitely need an effective
-way to automate the security testing for every API release. In this
-lab, we will elaborate further with the help of an example by using
-an online pet store for how to build your automated API security testing
-framework with various tools. The API security testing focuses mainly on
-the data injection and abnormal payload. Therefore, the Fuzz testing
-will also be introduced as random data input and security injection for
-the automated API security testing.
-
 The following topics will be discussed in this lab:
 
 -   Automated security testing for every API release
 -   How to build your security API and fuzz testing framework with ZAP,
     JMeter, and FuzzDB
-
-
-Automated security testing for every API release
-================================================
-
-Some of the web services are released with standard REST or SOAP APIs.
-The key difference between web and API security testing is the browser
-UI dependency. In API testing, we will only focus on the request and
-response instead of the UI layout or presentation.
-
-It is always recommended to use the API testing approach because web UI
-testing can provide unreliable testing results. General API security
-testing may cover authentication, authorization, input validation, error
-handling, data protection, secure transmission, and HTTP header
-security.
-
-The case we will discuss here concerns a development manager who would
-like to build an API security testing framework for every release.
-However, he may encounter the following challenges when he is trying to
-build the API security testing framework, especially for a development
-team without experienced security expertise. In the following sections,
-we will demonstrate some open source tools and approaches to solving
-these issues.
-
--   **Data input**: API security testing requires purpose-built random
-    security testing data (payload)
--   **Process request**: This requires a proper framework to process the
-    data input, to send the requests to web server, and process the
-    responses
--   **Process response**: To identify if any security vulnerabilities
-    exist based on the responses. For the web API, the typical standard
-    responses are JSON or XML instead of HTML, JavaScript, or CSS
-
-For Fuzz data input as security payloads, refer to the following
-resources:
-
--   **FuzzDB**: <https://github.com/fuzzdb-project/fuzzdb>
--   **SecLists**: <https://github.com/danielmiessler/SecLists>
--   **Radamsa**: <https://github.com/vah13/radamsa/releases>
-
-Radamsa is a fuzz data payloads generator based on a specified format or
-data sample. It can help if you expect to generate a lot of random and
-unexpected data payloads:
-
-
-![](./images/80589df1-ebe3-42fc-aee7-fc36cb269944.png)
-
-
-
-
-Fuzz Testing Tools
-
-
-To process the HTTP requests and responses, we will use JMeter and ZAP
-in our demonstration cases.
-
-
-
-
-
-
-
-
-
-
-
-
-Building your security API testing framework
-============================================
-
-There are several approaches and open source tools that can help to
-build your API security testing framework. The key challenge for
-security testing is the [processing responses] part. For example,
-to be able to identify the SQL injection vulnerability, the security
-testing requires not only proper designed injection payloads, but also
-the ability to identify the responses for SQL injection patterns.
-Therefore, when we build the security testing for restful or SOAP APIs,
-it\'s recommended that you apply the web security testing framework to
-help with the response detection.
-
-To build the security API testing framework, we will introduce three
-levels of approaches as summarized in the following table:
-
-  -------------- -------------------------- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  **Level**      **Recommended toolkits**   **Pros and cons**
-  Basic          ZAP                        ZAP can provide a general web security baseline scan. However, ZAP can\'t do specific REST or SOAP API security testing without proper guidance. For example, the HTTP POST request testing can\'t be done here, and that\'s why we introduce JMeter for the next level.
-  Intermediate   ZAP + JMeter               The rationale we introduce JMeter is to send specific REST or SOAP APIs and message body through ZAP. In this approach, ZAP will be running in proxy mode to monitor and detect the request/response for security issues.
-  Advanced       ZAP + JMeter + fuzz data   We will use JMeter with parameterized testing (data-driven testing). The fuzz data is a dictionary list of specific security issues, such as XSS, SQL injection, or common vulnerable passwords. Although ZAP itself also includes the fuzz testing that can replace the specified parameters with fuzz data, ZAP fuzz testing can only be done by GUI mode at this moment. By using ZAP and JMeter, we can execute the automation in command console mode for the integration with other CI frameworks.
-  Advanced       ZAP + OpenAPI              In this case, ZAP will import the API definition files, and do the initial security assessment based on the API lists.
-  -------------- -------------------------- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -123,16 +21,19 @@ and review the scan results.
 
 
 
-Step 1 -- OWASP ZAP download and launch with port 8090
-======================================================
+Step 1 -- OWASP ZAP launch with port 8090
+=========================================
 
-The OWASP ZAP installer can be downloaded at
+The OWASP ZAP installer has been installed in the lab environment
 <https://github.com/zaproxy/zaproxy/wiki/Downloads> depending on the
-platform. Once the installation is done, launch ZAP in GUI mode.
+platform. Click the dollowing icon on Desktop, launch ZAP in GUI mode.
 Although ZAP can also be executed in daemon mode, the GUI mode will help
-us to review the security assessment results. By default, the ZAP CLI is
-using the default port [8090] with ZAP. The proxy settings for ZAP
-can be configured using the menu under the [Tools] \|
+us to review the security assessment results. 
+
+![](./images/s1.png)
+
+By default, the ZAP CLI is using the default port [8090] with ZAP. The proxy settings for ZAP
+can be confirmed using the menu under the [Tools] \|
 [Options] \| [Local Proxies] \|
 [Port] \| [8090], as shown in the following
 screenshot:
@@ -141,57 +42,35 @@ screenshot:
 ![](./images/c586d034-6bc8-43d7-bff1-1523d21d5729.png)
 
 
-
-OWASP ZAP proxy configuration
-
-
-
-
-Step 2 -- install the ZAP-CLI
+Step 2 -- Using ZAP-CLI
 =============================
 
 ZAP provides several non-GUI interfaces for integration, such as Java
 API, REST API, and CLI. You may choose one of them for the integration.
-We will use ZAP-CLI here because it\'s easy to set up, and is also
-suitable for engineers who have a little programming background. Please
-ensure Python and PIP are installed on the system. The ZAP-CLI can be
-installed by one command line, as follows:
+We will use ZAP-CLI here. Confirm that zapcli is intalled by running following command:
 
 
 ```
-$ pip install --upgrade zapcli
+zap-cli --help
 ```
 
 
 To access ZAP using ZAP-CLI or ZAP, restful API will require an API Key.
 The API key of ZAP can be found or disabled under [Tools]
 \| [Options] \| [API]. To simplify the
-ZAP-CLI operations, we will disable the API key.
+ZAP-CLI operations, we have disable the API key.
 
 
 
 Step 3 -- execute the testing under ZAP-CLI
 ===========================================
 
-Once ZAP and the ZAP-CLI setup are done, we may trigger a few security
-assessments. Please be reminded that a spider scan is a must before
-running an active scan. Here are the differences between spider, quick,
-and active scans:
-
--   **Spider Scan**: It will explore and search all possible resources
-    and URLs of the website. No security attacks will be performed.
--   **Active Scan**: It will do security checks based on URLs or web
-    resources available in the ZAP site tree. Therefore, a spider scan
-    to explore web resources is a must before an active scan.
--   **Quick Scan**: It\'s an all-in-one command that can do a spider
-    scan, active scan and generate a testing report.
-
 To trigger the security scanning with the ZAP-CLI, execute the commands
 in the following order:
 
 
 ```
-$ zap-cli  spider       http://demo.testfire.net
+zap-cli  spider       http://demo.testfire.net
 $ zap-cli  quick-scan   http://demo.testfire.net
 $ zap-cli  active-scan  http://demo.testfire.net
 ```
@@ -204,7 +83,7 @@ For other command options, the [\--help] can be used, as follows:
 
 
 ```
-$ zap-cli --help
+zap-cli --help
 ```
 
 
@@ -213,13 +92,8 @@ For example, the following command will help you to know how to use of
 
 
 ```
-$ zap-cli   active-scan  --help
+zap-cli   active-scan  --help
 ```
-
-
-Refer to the following link for the detailed usage of the ZAP-CLI:
-
-<https://github.com/Grunny/zap-cli>
 
 
 
@@ -233,7 +107,7 @@ alerts at the medium level:
 
 
 ```
-$ zap-cli alerts -l Medium
+zap-cli alerts -l Medium
 ```
 
 
@@ -241,7 +115,7 @@ For the usage of [alerts] options, try the following command:
 
 
 ```
-$ zap-cli   alerts  --help
+zap-cli   alerts  --help
 ```
 
 
@@ -260,7 +134,7 @@ previously installed ZAP environment, we will set up JMeter for the
 testing.
 
 The following diagram shows the frameworks relationship between JMeter
-and ZAP:\
+and ZAP:
 
 ![](./images/d11f05b2-7d3a-4518-babe-4f378ea4c3d9.png)
 
@@ -273,15 +147,16 @@ To proceed with the testing, follow these steps.
 
 
 
-Step 1 -- download JMeter
-=========================
+Step 1 -- Launch JMeter
+=======================
 
-JMeter can be downloaded from
-[Https://jmeter.apache.org/download\_jmeter.cgi](https://jmeter.apache.org/download_jmeter.cgi).
-Java 8 runtime is required to execute JMeter. It\'s a compressed
-package. Once it\'s downloaded, unzip the package. To launch JMeter, run
-the [jmeter.bat] (Windows) or [jmeter.sh] (Linux), which can
-be found under [\\bin] folder.
+To launch JMeter, run the [jmeter.bat] (Windows) (Linux), which can be found under [\\bin] folder:
+
+```
+cd C:\Users\fenago\Downloads\apache-jmeter-5.4.3\bin
+
+jmeter.bat
+```
 
 
 
@@ -347,7 +222,7 @@ case, the following command will apply to our JMeter script. Use [JMeter
 
 
 ```
-Jmeter  -n  -t  MyRequest.jmx  -l  testResult.jtl  -H 127.0.0.1  -P 8090
+Jmeter  -n  -t  MyPostRequest.jmx  -l  testPostResult.jtl  -H 127.0.0.1  -P 8090
 ```
 
 
@@ -363,7 +238,7 @@ results in JSON or HTML format, as follows:
 
 
 ```
-$ CURL   "http://localhost:8090/JSON/core/view/alerts"
+CURL   "http://localhost:8090/JSON/core/view/alerts"
 ```
 
 
@@ -372,7 +247,7 @@ format:
 
 
 ```
-$ CURL   "http://localhost:8090/HTML/core/view/alerts"
+CURL   "http://localhost:8090/HTML/core/view/alerts"
 ```
 
 
@@ -387,59 +262,7 @@ attacks. To test if the login is vulnerable to SQL injection, JMeter
 will be reading the external fuzz SQL injection data to replace the
 username and password parameters to send the login request.
 
-To generate a list of security payloads, here are some of the
-recommended resources:
-
-+-----------------------------------+-----------------------------------+
-| **Fuzz database**                 | **Description**                   |
-+-----------------------------------+-----------------------------------+
-| FuzzDB                            | FuzzDB compressive application    |
-|                                   | security testing dictionary for   |
-|                                   | attack patterns (injection, XSS,  |
-|                                   | directory traversals), discovery  |
-|                                   | (admin directories or sensitive   |
-|                                   | files), response analysis         |
-|                                   | (regular expression patterns),    |
-|                                   | web backdoor samples, and         |
-|                                   | user/pwd list.                    |
-|                                   |                                   |
-|                                   | <https://                         |
-|                                   | github.com/fuzzdb-project/fuzzdb> |
-+-----------------------------------+-----------------------------------+
-| Naughty Strings                   | The Naughty Strings provides a    |
-|                                   | very long list of strings. There  |
-|                                   | are two formats provided,         |
-|                                   | [blns.txt] and              |
-|                                   | [blns.json].                |
-|                                   |                                   |
-|                                   | <https://github.com/minim         |
-|                                   | axir/big-list-of-naughty-strings> |
-+-----------------------------------+-----------------------------------+
-| SecList                           | This is similar to FuzzDB, which  |
-|                                   | provides various kinds of fuzz    |
-|                                   | data such as command injections,  |
-|                                   | JSON, LDAP, user agents, XSS,     |
-|                                   | char, numeric, Unicode data, and  |
-|                                   | so on                             |
-|                                   |                                   |
-|                                   | <https://gi                       |
-|                                   | thub.com/danielmiessler/SecLists> |
-+-----------------------------------+-----------------------------------+
-| Radamsa                           | Unlike previous FuzzDB that       |
-|                                   | provides a list of word           |
-|                                   | dictionary, it\'s a tool that can |
-|                                   | dynamically generate              |
-|                                   | format-specific based on a given  |
-|                                   | sample                            |
-|                                   |                                   |
-|                                   | <                                 |
-|                                   | https://github.com/vah13/radamsa> |
-+-----------------------------------+-----------------------------------+
-
-\
-Follow the following instructions to apply the SQL injection data with
-JMeter.
-
+Follow the following instructions to apply the SQL injection data with JMeter.
 
 
 Step 1 -- download the SQL injection data
@@ -456,23 +279,17 @@ can be obtained from the following URL:
 In this case, we will create the [sqli.csv] with the SQL injection
 security payloads, as follows:
 
-+-----------------------------------------------------------------------+
-| **SQL injection payloads samples**                                    |
-+-----------------------------------------------------------------------+
-| 
-| ```                                                |
-| UNION ALL SELECT                                                      |
-|  ) or sleep(__TIME__)='                                               |
-| )) or benchmark(10000000,MD5(1))#                                     |
-| hi' or 'a'='a                                                         |
-| 0                                                                     |
-| 21 %                                                                  |
-| limit                                                                 |
-| or 1=1                                                                |
-| or 2 > 1Copy                                                          |
-| ```                                                                   |
-| 
-+-----------------------------------------------------------------------+
+```
+UNION ALL SELECT
+ ) or sleep(__TIME__)='
+)) or benchmark(10000000,MD5(1))#
+hi' or 'a'='a
+0
+21 %
+limit
+or 1=1
+or 2 > 1
+```
 
 
 
@@ -490,12 +307,6 @@ in JMeter that is used to read the values from the [sqli.csv]:
 
 
 ![](./images/b2b7ca13-1965-4996-82d6-bcd40f2243b3.png)
-
-
-
-CSV Data Set Config in JMeter
-
-
 
 
 Step 3 -- apply the variable name
@@ -542,7 +353,7 @@ Follow the following command to execute the JMeter script with ZAP proxy
 
 
 ```
-$ Jmeter  -n  -t  MyRequest.jmx  -l  testResult.jtl  -H 127.0.0.1  -P 8090
+Jmeter  -n  -t  MyRequest.jmx  -l  testResult.jtl  -H 127.0.0.1  -P 8090
 ```
 
 
@@ -569,10 +380,6 @@ Error Disclosure] parts:
 
 ![](./images/6bdca872-804d-4750-bded-a66d290c518b.png)
 
-
-
-
-Error disclosure in ZAP
 
 
 In this case, we target the login API for the testing of SQL injection
@@ -669,7 +476,7 @@ website. Refer to the following command:
 
 
 ```
-CURL  “http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMethod=GET&url=https://petstore.swagger.io/&recurse=&inScopeOnly=&scanPolicyName=&method=&postData=&contextId=”
+CURL  "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMethod=GET&url=https://petstore.swagger.io/&recurse=&inScopeOnly=&scanPolicyName=&method=&postData=&contextId="
 ```
 
 
@@ -684,8 +491,8 @@ follows:
 
 
 ```
-$  CURL "http://localhost:8090/JSON/core/view/alerts"
-$  CURL   "http://localhost:8090/HTML/core/view/alerts"
+ CURL "http://localhost:8090/JSON/core/view/alerts"
+$  CURL  "http://localhost:8090/HTML/core/view/alerts"
 ```
 
 
@@ -694,7 +501,7 @@ URL, refer to the following command:
 
 
 ```
-$ CURL "http://localhost:8090/JSON/core/view/alerts/?zapapiformat=JSON&formMethod=GET&baseurl=https://petstore.swagger.io&start=&count=&riskId="
+CURL "http://localhost:8090/JSON/core/view/alerts/?zapapiformat=JSON&formMethod=GET&baseurl=https://petstore.swagger.io&start=&count=&riskId="
 ```
 
 
@@ -702,12 +509,8 @@ The following command will generate HTML format results:
 
 
 ```
-$ CURL "http://localhost:8090/HTML/core/view/alerts/?zapapiformat=HTML&formMethod=GET&baseurl=https://petstore.swagger.io&start=&count=&riskId="
+CURL "http://localhost:8090/HTML/core/view/alerts/?zapapiformat=HTML&formMethod=GET&baseurl=https://petstore.swagger.io&start=&count=&riskId="
 ```
-
-
-
-
 
 
 
@@ -727,80 +530,11 @@ techniques for the API security testing scenarios. In addition, we also
 demonstrated how the testing tool JMeter can be integrated with the
 security scanning tool ZAP to achieve the API security testing:
 
--   Basic---web service testing with ZAP CLI
--   Intermediate---API testing with ZAP and JMeter
--   Advanced---parameterized security payload with fuzz
+-   Basic --- web service testing with ZAP CLI
+-   Intermediate --- API testing with ZAP and JMeter
+-   Advanced --- parameterized security payload with fuzz
 -   Security testing with ZAP OpenAPI/SOAP API
 
 After having discussed API-level security testing, we will move on to
 the integrated security testing of web applications in the next lab.
 
-
-
-
-
-
-
-
-
-
-
-
-Questions
-=========
-
-1.  Which one of the followings is not used for security data payloads
-    source?
-    1.  FuzzDB
-    2.  SecLists
-    3.  CURL
-    4.  Naughty Strings
-2.  Which one can be used to send HTTP requests?
-    1.  JMeter
-    2.  Python Requests
-    3.  CURL
-    4.  All of above
-3.  Which one of the ZAP-CLI commands can be used to trigger the
-    security assessments?
-    1.  ZAP-CLI spider
-    2.  ZAP-CLI quick-scan
-    3.  ZAP-CLI active-scan
-    4.  All of above
-4.  In JMeter, what element is used to read the CSV values?
-    1.  CSV Data Set Config
-    2.  HTTP Request
-    3.  View Results Tree
-    4.  Thread Group
-5.  What will the ZAP API do?
-    1.  View the testing results?
-    2.  Trigger a testing
-    3.  Spider a website
-
-
-
-
-
-
-
-
-
-
-
-
-Further reading
-===============
-
--   **ASTRA API Security Testing**:
-    [https://www.astra-security.info](https://www.astra-security.info/)
--   **API Security Checklist**:
-    <https://github.com/shieldfy/API-Security-Checklist>
--   **Python API Security testing by OpenStack Security**:
-    <https://github.com/openstack/syntribos>
--   **Testing your API for Security in Python**:
-    <https://github.com/BBVA/apitest>
--   **Online Vulnerable Web**:
-    [http://zero.webappsecurity.com](http://zero.webappsecurity.com/)
--   **FuzzDB**: <https://github.com/fuzzdb-project/fuzzdb>
--   **SecList**: <https://github.com/danielmiessler/SecLists>
--   **Web Security Fuzz Testing 0d1n**:
-    <https://github.com/CoolerVoid/0d1n>

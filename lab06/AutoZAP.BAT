@@ -42,4 +42,4 @@ CURL   "http://127.0.0.1:8090/OTHER/core/other/htmlreport/?formMethod=GET" > ZAP
 
 echo shutdown the ZAP
 
-CURL   “http://localhost:8090/JSON/core/action/shutdown/?zapapiformat=JSON&formMethod=GET”
+CURL   "http://localhost:8090/JSON/core/action/shutdown/?zapapiformat=JSON&formMethod=GET"

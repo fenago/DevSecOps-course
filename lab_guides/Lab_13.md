@@ -19,13 +19,6 @@ The topics that will be covered in this lab are as follows:
 Scan For known JavaScript vulnerabilities
 =========================================
 
-JavaScript libraries are widely used in any website, and are also
-considered the most vulnerable components. As *Using Components with
-Known Vulnerabilities* is one of the OWASP Top 10 security issues, we
-will need to constantly monitor any major known vulnerable components on
-the web. In this demonstration, we will introduce how to scan for known
-vulnerabilities in JavaScript libraries.
-
 We will be using RetireJS because it\'s simple to use and provides
 several ways of scanning, such as a command-line scanner, Grunt plugin,
 browser (Chrome/Firefox) extension, and also the Burp and OWASP Zap
@@ -41,7 +34,7 @@ The installation of RetireJS requires us to use [npm]:
 
 
 ```
-$ npm install -g retire
+npm install -g retire
 ```
 
 
@@ -56,7 +49,7 @@ In our example, we will scan the whole project under the
 
 
 ```
-$ retire   --path   ~/NodeGoat/    --colors
+retire   --path   ./NodeGoat/    --colors
 ```
 
 
@@ -82,21 +75,6 @@ NodeGoat project:
 
 
 
-
-RetireJS scanning report
-
-
-
-
-
-
-
-
-
-
-
-
-
 WebGoat with OWASP dependency check
 ===================================
 
@@ -116,14 +94,8 @@ vulnerable web project used to practice security testing:
 
 
 ```
-$ git    clone    https://github.com/WebGoat/WebGoat
+git    clone    https://github.com/WebGoat/WebGoat
 ```
-
-
-We will also use the latest version of OWASP dependency-check, which can
-be downloaded here:
-<https://bintray.com/jeremy-long/owasp/dependency-check>.[](https://bintray.com/jeremy-long/owasp/dependency-check)
-
 
 
 Step 2 -- dependency check scan
@@ -135,10 +107,12 @@ the SH under Linux. Refer to the following command for the WebGoat
 project scan:
 
 
-```
-$ dependency-check --project WebGoat --format XML --scan d:\tools\WebGoat
+To Do:
 
-$ dependency-check --project WebGoat --format HTML --scan d:\tools\WebGoat
+```
+dependency-check --project WebGoat --format XML --scan d:\tools\WebGoat
+
+dependency-check --project WebGoat --format HTML --scan d:\tools\WebGoat
 ```
 
 
@@ -164,21 +138,6 @@ After the scan, the report will be generated under the
 
 
 
-
-Dependency check report
-
-
-
-
-
-
-
-
-
-
-
-
-
 Secure communication scan with SSLScan
 ======================================
 
@@ -191,23 +150,7 @@ these steps to perform the scan.
 Step 1 -- SSLScan setup
 =======================
 
-SSLSCan is a C program that can be downloaded with git clone:
-
-
-```
-$ git   clone   https://github.com/rbsec/sslscan
-```
-
-
-Once it\'s downloaded on Linux, use [make static] to build the
-SSLSCan tool:
-
-
-```
-$ make static
-```
-
-
+To Do:
 
 
 Step 2 -- SSLScan scan
@@ -218,7 +161,7 @@ the target website\'s URL:
 
 
 ```
-$ sslscan --no-failed --xml=nodegoat_SSLscan.xml  nodegoat.kerokuapp.com
+sslscan --no-failed --xml=nodegoat_SSLscan.xml  nodegoat.kerokuapp.com
 ```
 
 
@@ -246,11 +189,6 @@ This screenshot shows the sslScan results for the NodeGoat website:
 
 
 ![](./images/43b11cf2-8002-4d5f-9545-ecd38c671bc5.png)
-
-
-
-
-SSLScan report
 
 
 In addition to SSLScan, we can also use SSLTest, SSLyze, or NAMP for SSL
@@ -355,137 +293,13 @@ XML-format file:
 
 
 ```
-$ nmap -p80 --script http-security-headers nodegoat.kerokuapp.com  -oX nodeGoat_NmapScan_HTTPheaders.xml
+nmap -p80 --script http-security-headers nodegoat.kerokuapp.com  -oX nodeGoat_NmapScan_HTTPheaders.xml
 ```
 
 
 We will be using these NMAP security testing commands and expected
 results to integrate with the BDD framework Gauntlt in the following
 demonstrations.
-
-
-
-NMAP BDD testing with Gauntlt
-=============================
-
-In this lab, we will be using NMAP with the Gauntlt BDD testing
-framework to test the NodeGoat website. The key structure of the Gauntlt
-includes scenario, When, and Then. The *scenario* is used to describe
-the testing case. The **When I launch a \...attack with\...** is used to
-define the tools and command options to execute the testing. Finally,
-the **Then the output should is** to define the expected results. It
-will make the whole script and the testing results. In this
-demonstration, we will have the following security testing scenarios:
-
--   **Scenario**: Verify the security header using http-security-headers
--   **Scenario**: Verify the server is vulnerable to a HTTP slow DOS
-    attack
--   **Scenario**: Verify the use of insecure SSL
--   **Scenario**: Was there any reported XSS history for the website
--   **Scenario**: Verify any potential SQL injection into the website
--   **Scenario**: Verify any potential Stored XSS
-
-The NMAP Guantlt script will be defined as follows, with the filename
-[nmap\_NodeGoat\_gauntlt.attack]:
-
-
-```
-@slow
-
-Feature: nmap attacks for website. It will cover the following tesitng security header check, HTTP Slow DOS check, SSL cipher check, XSSed History Check, SQL Injection and the Stored XSS. 
-
- Background:
- Given "nmap" is installed
- And the following profile:
- | name | value |
- | host | nodegoat.kerokuapp.com |
-
-
- Scenario: Verify the security header using the http-security-headers
- When I launch a "nmap" attack with:
- """
- nmap -p80 --script http-security-headers <host>
- """
- Then the output should contain "X-Frame-Options: DENY"
-
-
-  Scenario: Verify if the server is vulnerable to HTTP SLOW DOS attack
-    When I launch an "nmap" attack with:
-      """
-      nmap -p80,443 --script http-slowloris-check  <host>
-      """
-    Then the output should not contain:
-      """
-      LIKELY VULNERABLE
-      """
-
-  Scenario: Verify the uses of insecure SSL 
-    When I launch an "nmap" attack with:
-      """
-      nmap --script=ssl-enum-ciphers  <host>
-      """
-    Then the output should not contain:
-      """
-      SSL
-      """
-
-  Scenario: Was there any reported XSS history of the website?
-    When I launch an "nmap" attack with:
-      """
-      nmap -p80 --script http-xssed.nse <host>
-      """
-    Then the output should contain:
-      """
-      No previously reported XSS vuln
-      """
-
-  Scenario: Verify any potential SQL injection of the website. 
-    When I launch an "nmap" attack with:
-      """
-      nmap -sV --script=http-sql-injection <host>
-      """
-    Then the output should not contain:
-      """
-      Possible sqli for
-      """
-
-  Scenario: Verify any potential Stored XSS  
-    When I launch an "nmap" attack with:
-      """
-      nmap -p80 --script http-stored-xss.nse <host>
-      """
-    Then the output should contain:
-      """
-      Couldn't find any stored XSS vulnerabilities.
-      """
-```
-
-
-To execute the script, run the following command:
-
-
-```
-$ gauntlt    nmap_NodeGoat_gauntlt.attack
-```
-
-
-The following screenshot shows one of the testing results for Gauntlt.
-As you can see, the testing results will be much easier to read and
-understand, even for non-security professionals:
-
-
-![](./images/ddce4f22-e103-4a00-8066-688e66311695.png)
-
-
-
-
-Gauntlt results
-
-
-
-For more examples of Gauntlt, please refer to
-<https://github.com/gauntlt/gauntlt/tree/master/examples>.
-
 
 
 
@@ -545,7 +359,7 @@ To execute the robot Framework script, use the following command:
 
 
 ```
-$ robot    nmap_NodeGoat.robot
+robot    nmap_NodeGoat.robot
 ```
 
 
@@ -565,22 +379,6 @@ Here is one of the Robot framework HTML reports, [log.html]:
 
 
 ![](./images/53d755dc-b76a-4e45-9004-5cadfb0ea18c.png)
-
-
-
-
-Robot framework report
-
-
-
-
-
-
-
-
-
-
-
 
 
 Summary

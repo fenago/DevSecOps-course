@@ -47,7 +47,7 @@ For the Linux version, refer to the following:
 
 
 ```
-$ git clone  https://gitlab.com/akihe/radamsa
+git clone  https://gitlab.com/akihe/radamsa
 $ cd radamsa
 $ make
 $ sudo make install 
@@ -132,406 +132,11 @@ API fuzz testing with Automation Frameworks
 In Lab 5,
 *Security API and Fuzz Testing*, we demonstrated how to use JMeter to do
 fuzz testing with OWASP ZAP. In this lab, we will demonstrate other
-techniques using Selenium/ **data-driven testing** (**DDT**) and the
-0d1n. There is no one solution that fits all testing scenarios. It may
-depend on the skill-sets of the team, existing testing frameworks, and
-integration flexibility.
-
-Some key considerations and applied scenarios are listed in this table:
-
-+-----------------------------------+-----------------------------------+
-| **Considerations**                | **Applied scenarios and suggested |
-|                                   | technical approaches**            |
-+-----------------------------------+-----------------------------------+
-| Launch a browser                  | There are pros and cons to        |
-|                                   | launching a browser for Web UI    |
-|                                   | E2E automation. The key advantage |
-|                                   | is that it simulates the human    |
-|                                   | behavior for complete E2E         |
-|                                   | testing. However, this kind of    |
-|                                   | testing execution cycle can be    |
-|                                   | time-consuming and prone to error |
-|                                   | due to Web UI interactions.       |
-|                                   |                                   |
-|                                   | Both Selenium and Robot Framework |
-|                                   | support Web UI E2E automation.    |
-|                                   | These two are very common         |
-|                                   | automation testing frameworks.    |
-+-----------------------------------+-----------------------------------+
-| Programming                       | Selenium supports a wide range of |
-|                                   | programming languages such as     |
-|                                   | Java, Python, C\#, and Ruby.      |
-|                                   | During implementation, we suggest |
-|                                   | using the Selenium IDE to         |
-|                                   | generate the related code and do  |
-|                                   | further customization.            |
-|                                   |                                   |
-|                                   | The Robot Framework is            |
-|                                   | keyword-driven. Although it       |
-|                                   | doesn\'t require much programming |
-|                                   | skill, the team has to know how   |
-|                                   | to use keywords and related       |
-|                                   | libraries correctly.              |
-|                                   |                                   |
-|                                   | JMeter doesn\'t require           |
-|                                   | programming, but it will require  |
-|                                   | you to understand the HTTP        |
-|                                   | GET/POST API requests of the      |
-|                                   | target website. This can be done  |
-|                                   | by using browser *F12* to monitor |
-|                                   | the [http] traffic. Then,   |
-|                                   | we will define the HTTP requests  |
-|                                   | in JMeter based on this           |
-|                                   | information.                      |
-|                                   |                                   |
-|                                   | 0d1n is a CLI tool. It doesn\'t   |
-|                                   | require any programming, but you  |
-|                                   | will need to understand the HTTP  |
-|                                   | [GET]/[POST] API and  |
-|                                   | the parameters of the target      |
-|                                   | website.                          |
-+-----------------------------------+-----------------------------------+
-| Quick testing                     | 0d1n and Wfuzz are standalone     |
-|                                   | tools that can do a quick fuzz    |
-|                                   | test on the target website        |
-|                                   | without any dependencies.         |
-|                                   |                                   |
-|                                   | Although ZAP can also do fuzz     |
-|                                   | testing, it currently can only be |
-|                                   | executed in GUI mode.             |
-+-----------------------------------+-----------------------------------+
-| API-based testing                 | Jmeter, 0d1n, and Wfuzz are good  |
-|                                   | candidates for HTTP API-level     |
-|                                   | testing due to their simplicity   |
-|                                   | of deployment and execution.      |
-+-----------------------------------+-----------------------------------+
-| Authenticated pages               | If the testing scenario requires  |
-|                                   | authenticated pages to walk       |
-|                                   | through, it\'s recommended to use |
-|                                   | JMeter, Selenium, and Robot       |
-|                                   | Framework since these testing     |
-|                                   | frameworks can do web UI testing  |
-|                                   | very well.                        |
-+-----------------------------------+-----------------------------------+
-
-The following table lists the key characteristics of various technical
-approaches to implementing fuzz testing:
-
-+---------+---------+---------+---------+---------+---------+---------+
-|         | **OWASP | **J     | **Sel   | **Robot | *       | **      |
-|         | ZAP**   | Meter** | enium** | Fram    | *0d1n** | Wfuzz** |
-|         |         |         |         | ework** |         |         |
-|         |         |         | **DDT** |         |         |         |
-|         |         |         |         | **DDT** |         |         |
-+---------+---------+---------+---------+---------+---------+---------+
-| Dep     | No      | OWASP   | OWASP   | CSV     | OWASP   | No      |
-| endency |         | ZAP     | ZAP     | Library | ZAP     |         |
-+---------+---------+---------+---------+---------+---------+---------+
-| Coding  | No      | No      | Yes,    | No      | No      | No      |
-|         |         |         | but the |         |         |         |
-|         |         |         | S       |         |         |         |
-|         |         |         | elenium |         |         |         |
-|         |         |         | IDE can |         |         |         |
-|         |         |         | help to |         |         |         |
-|         |         |         | g       |         |         |         |
-|         |         |         | enerate |         |         |         |
-|         |         |         | the     |         |         |         |
-|         |         |         | script  |         |         |         |
-+---------+---------+---------+---------+---------+---------+---------+
-| Fuzz    | ZAP UI  | CSV     | DDT     | CSV     | [Λ      | [FUZZ   |
-| data    | mode    | Config  | library | Library | ] | ] |
-| handing | only    | in      | in      |         | in the  | or      |
-|         |         | JMeter  | Python  | [for    | command | [FUZ2Z  |
-|         |         |         |         | ] | line    | ] |
-|         |         |         |         | Loop    |         | keyword |
-+---------+---------+---------+---------+---------+---------+---------+
-| Testing | Refer   | Refer   | Refer   | Refer   | Refer   | Output  |
-| report  | to      | to      | to      | to      | to      | to the  |
-|         | OWASP   | OWASP   | OWASP   | OWASP   | OWASP   | console |
-|         | ZAP     | ZAP     | ZAP     | ZAP     | ZAP     | or file |
-+---------+---------+---------+---------+---------+---------+---------+
-| Fuzz    | Yes     | Yes     | Yes     | Yes     | Yes,    | Yes     |
-| m       |         |         |         |         | but     |         |
-| ultiple |         |         |         |         | other   | [FUZZ]  |
-| par     |         |         |         |         | values  | , |
-| ameters |         |         |         |         | may be  | [FUZ2Z] |
-|         |         |         |         |         | filled  | , |
-|         |         |         |         |         | as      | [       |
-|         |         |         |         |         | empty   | FUZ3Z]{ |
-|         |         |         |         |         |         | .kbd}.. |
-+---------+---------+---------+---------+---------+---------+---------+
-| Inte    | No      | RESTful | S       | Robot   | **comma | CLI     |
-| gration |         | APIs    | elenium | Fr      | nd-line |         |
-| in      |         |         | scripts | amework | inte    |         |
-| terface |         | JMeter  |         | scripts | rface** |         |
-|         |         | scripts |         |         | (*      |         |
-|         |         |         |         |         | *CLI**) |         |
-+---------+---------+---------+---------+---------+---------+---------+
-| Testing | The API | High    | High    | High    | Low     | MED     |
-| fr      | and CLI |         |         |         |         |         |
-| amework | don\'t  | JMeter  | Common  | Common  | 0d1n is |         |
-| pop     | support | is      | web UI  | acc     | speci   |         |
-| ularity | fuzz    | common  | fr      | eptance | fically |         |
-|         | testing | in REST | amework | testing | built   |         |
-|         | at this | API and |         | fr      | for     |         |
-|         | point   | perf    |         | amework | fuzz    |         |
-|         |         | ormance |         |         | testing |         |
-|         |         | testing |         |         | in the  |         |
-|         |         |         |         |         | CLI     |         |
-+---------+---------+---------+---------+---------+---------+---------+
-| Launch  | No      | No      | Yes     | Yes     | No      | No      |
-| browser |         |         |         |         |         |         |
-| during  |         |         |         |         |         |         |
-| testing |         |         |         |         |         |         |
-+---------+---------+---------+---------+---------+---------+---------+
-
-In the following sections, we will demonstrate how these techniques and
-tools can be applied to security fuzz testing with the NodeGoat sign-in
-API.
+techniques using Selenium/ **data-driven testing** (**DDT**).
 
 
-Which is the best solution? If your team has created the automation
-frameworks you\'re using or you are familiar with specific tools such as
-JMeter, Selenium, or Robot Framwork, it\'s suggested you build on top of
-it instead of introducing a new one.
-
-
-
-
-Approach 1 -- security fuzz testing with Wfuzz
-==============================================
-
-In this demonstration, we will use Wfuzz to do username and password
-fuzz testing with the sign-in page. The values of the username and
-password will be provided with [cmdi.csv] and [sqli.csv] .
-
-
-
-Step 1 -- installing Wfuzz
-==========================
-
-It\'s suggested you install Wfuzz on Linux. Follow these commands to
-install Wfuzz:
-
-
-```
-$ git clone https://github.com/xmendez/wfuzz
-$ cd wfuzz/
-$ sudo python setup.py install
-```
-
-
-
-
-Step 2-- fuzz testing with sign-in
-==================================
-
-The basic use of Wfuzz testing with sign-in is shown as follows:
-
-
-```
-wfuzz -c -z file,name.csv -z file,pass.csv -f Wfuzz_report.html,html -d "userName=FUZZ&password=FUZ2Z&_csrf=" http://nodegoat.herokuapp.com/login
-```
-
-
-Here is the explanation of how each option is used in our case:
-
-+-----------------------------------+-----------------------------------+
-| **Options**                       | **Explanation of use**            |
-+-----------------------------------+-----------------------------------+
-| [-c]                        | Color output on the console       |
-+-----------------------------------+-----------------------------------+
-| [-z file,\<filename\>]      | Read the values from a file to    |
-|                                   | replace [FUZZ],             |
-|                                   | [FUZ2Z\...FUZnZ].           |
-|                                   |                                   |
-|                                   | In our example, we have two       |
-|                                   | parameters to be replaced with    |
-|                                   | fuzz data.                        |
-+-----------------------------------+-----------------------------------+
-| [-f                               | Output the result to an HTML file |
-| \<Output\_filename\>,html]  | named [Wfuzz\_report.html]  |
-+-----------------------------------+-----------------------------------+
-| [-d \"name=FUZZ\"]          | It defines the [POST]       |
-|                                   | message body. The [FUZZ]    |
-|                                   | keyword and [FUZ2Z] will be |
-|                                   | replaced with the file input,     |
-|                                   | which was defined by using        |
-|                                   | [-z] file previously.       |
-+-----------------------------------+-----------------------------------+
-
-Although it\'s not a must, it\'s also suggested to configure OWASP ZAP
-as a system proxy. This will allow OWASP ZAP to analyze the HTTP
-requests/responses for potential security issues. After all, OWASP ZAP
-includes a more powerful security detection engine while Wfuzz can only
-do basic results analysis.
-
-
-
-Step 3 -- reviewing the Wfuzz report
-====================================
-
-Wfuzz will output a summary report to the console and also in HTML. In
-the console, the response column shows the response code. It also shows
-the number of lines, words, and chars of the HTTP response, based on
-each specified Payload. Here are some tips for reading the HTTP
-response, based on this kind of fuzz testing:
-
-+-----------------------------------+-----------------------------------+
-| **HTTP response code**            | **What it means in security       |
-|                                   | testing**                         |
-+-----------------------------------+-----------------------------------+
-| 200                               | It means the target resource is   |
-|                                   | available. It\'s useful for       |
-|                                   | directory traversal to identify   |
-|                                   | whether the resources, URL, or    |
-|                                   | path are available.               |
-+-----------------------------------+-----------------------------------+
-| 302                               | If it\'s for sign-in testing, it  |
-|                                   | can be an indicator of login      |
-|                                   | success. If we are doing          |
-|                                   | brute-force sign-in testing, we   |
-|                                   | will be looking for the major     |
-|                                   | variation responses among all the |
-|                                   | HTTP responses. For example, all  |
-|                                   | other requests return 200, but a  |
-|                                   | few requests return 302.          |
-+-----------------------------------+-----------------------------------+
-| 404                               | Page or resource not found. It\'s |
-|                                   | used to identify that the target  |
-|                                   | resource is available.            |
-+-----------------------------------+-----------------------------------+
-| 401 or 403                        | This can be an indicator that the |
-|                                   | resource is available but the     |
-|                                   | request is unauthorized.          |
-+-----------------------------------+-----------------------------------+
-| 50x                               | This can be a serious security    |
-|                                   | issue; one of the following needs |
-|                                   | further investigation:            |
-|                                   |                                   |
-|                                   | -   Excessive system information  |
-|                                   |     exposure                      |
-|                                   | -   Symptoms of SQL injection due |
-|                                   |     to error exposure             |
-|                                   | -   Denial of service             |
-+-----------------------------------+-----------------------------------+
-
-Here is a screenshot of the Wfuzz console output. Look for any
-variations in the responses. In this case, all of the responses are 200.
-If any requests return non-200 responses, they will need further
-investigation. For lines, words, and chars, we are also looking for a
-major variation of the request, which can be an indicator of potential
-security issue:
-
-
-![](./images/4b79731c-1e36-401e-a34b-99d3074a3671.png)
-
-
-
-In addition, Wfuzz also provides a HTML report. If you found any request
-suspicious, click [send POST] to trigger the HTTP request
-again:
-
-
-![](./images/bd31385d-02d8-4b61-95ca-b336c3c821da.png)
-
-
-
-Wfuzz testing report
-
-
-
-
-Approach 2 -- security fuzz testing with 0d1n
+Approach - Selenium DDT (data-driven testing)
 =============================================
-
-In this demonstration, we will be using another fuzz tool, 0d1n, to do
-fuzz testing with NodGoat sign-in.
-
-
-
-Step 1 -- installation of 0d1n
-==============================
-
-The installation of 0d1n requires it to be compiled from the source code
-and [libcurl] installed. Follow these commands shown as follows:
-
-
-```
-$ git clone https://github.com/CoolerVoid/0d1n/
-$ sudo apt-get install libcurl-dev
-
-$ sudo yum install libcurl-devel
-
-$ make
-
-$ ./0d1n
-```
-
-
-If the installation is successful, the [./0d1n] command should be
-able to list the detailed usage of the tool.
-
-This screenshot shows the execution of [./0d1n] for the usage
-examples:
-
-
-![](./images/ed4002e2-e95e-4e43-9930-70311fee063b.png)
-
-
-
-0d10 usage
-
-
-
-
-Step 2 -- execution of 0d1n with OWASP ZAP
-==========================================
-
-The following command will trigger fuzz testing against the NodeGoat
-login page. In addition, 0d1n can also easily define the proxy which we
-will specify OWASP ZAP here. Although running ZAP can be optional, it
-will be a supplement to [0d1n] to detect security issue based on
-HTTP requests/responses:
-
-
-```
-$ ./0d1n --host 'http://nodegoat.herokuapp.com/login' --post 'userName=user1&password=^&_csrf=' --payloads ./payloads/user.txt --log log001 --threads 3 --timeout 5 --proxy 127.0.0.1:8090 --find_string_list ./payloads/response.txt --save_response --tamper randcase
-```
-
-
-Following are the list of commands used in execution of 0d1n:
-
-  ------------------------------------------------ -------------------------------------------------------------------------------------------------------------------
-  **Command options**                              **Explanation of use**
-  [\--host \'\<target Host\>\']              Define the target website
-  [\--post \'\<Post Message body\>\']        Define the POST message body. The [∧] symbol will be replaced with fuzz data, which is defined by payloads.
-  [\--payloads \<filename\>]                 Define the source of the payloads for fuzz data input
-  [\--log \<logName\>]                       The log name
-  [\--proxy \<host:port\>]                   In our case, we still use ZAP as a proxy to monitor security issues
-  [\--find\_string\_list \<response.txt\>]   0d1n allows us to search for some suspicious strings in the HTTP response
-  [\--save\_response]                        Enable the save response highlights view when you click on a HTTP status code in data tables
-  [\--tamper randcase]                       Use lowercase and uppercase random position in a string
-  ------------------------------------------------ -------------------------------------------------------------------------------------------------------------------
-
-
-
-Step 3 -- review the ZAP report (optional)
-==========================================
-
-To review the security issues identified by OWASP ZAP, execute this
-command:
-
-
-```
-$ zap-cli report -o   ZAP_Report.html  -f html
-```
-
-
-
-
-Approach 3 -- Selenium DDT (data-driven testing)
-================================================
 
 In this approach, we will be using selenium to do the sign-in and the
 DDT techniques to read all the fuzz data from the file
@@ -637,7 +242,7 @@ while, since it will launch and close Firefox for every request:
 
 
 ```
-$ pytest   SignIn_DDT_NodeGoat.py  --proxy=127.0.0.1:8090
+pytest   SignIn_DDT_NodeGoat.py  --proxy=127.0.0.1:8090
 ```
 
 
@@ -650,7 +255,7 @@ Once the testing is done, refer to the OWASP ZAP report:
 
 
 ```
-$ zap-cli report -o   ZAP_Report.html  -f html
+zap-cli report -o   ZAP_Report.html  -f html
 ```
 
 
@@ -665,43 +270,15 @@ DDT testing for the NodeGoat sign-in. We will still read the
 [sqli.csv] file to do the username and password fuzz testing.
 
 
-
-Step 1-- Robot Framework environment setup
-==========================================
-
-The Robot Framework environment setup may refer to Lab 9,
-*BDD Acceptance Security Testing*. In this testing scenario, in addition
-to Robot Framework, we will also require the following external
-libraries:
-
-  ----------------------------- --------------------------------------------------------------- --------------------------------------------------------------
-  **Robot Framework library**   **How to install**                                              **Usage scenarios in this case**
-  CSVLibrary                    [pip install -U robotframework-csvlibrary]                Read values from the CSV file
-  SeleniumLibrary               [pip install \--upgrade robotframework-seleniumlibrary]   Launch the browser and execute the defined web UI operations
-  ----------------------------- --------------------------------------------------------------- --------------------------------------------------------------
-
-In addition, the selenium web drivers also need to be installed on the
-testing machine. This approach assumes that ZAP is running and the
-system proxy is configured to the ZAP proxy properly.
-
-
-
-Step 3 -- Robot Framework script
-================================
+Step -- Robot Framework script
+==============================
 
 To complete the testing scenario, here are some major robot framework
 keywords used in this case:
 
-  -------------------------------- -------------------------------------------------------------------------------------------------------------
-  **Keyword commands**             **Use of the keyword**
-  read [.csv] file to list   Read the [sqli.csv] CSV file to the list
-  Open Browser                     Open the browser
-  Log                              Print the value to the log
-  [FOR \.....IN]             This is a loop to read all the values of the CSV files
-  Input Text                       Locate the NodeGoat sign-in username and password, and input the text with the values from [sqli.csv]
-  Click button                     Click the [Submit] button on the NodeGoat website
-  Close Browser                    Close the browser for every test
-  -------------------------------- -------------------------------------------------------------------------------------------------------------
+To Do:
+
+![](./images/s5.png)
 
 The Robot Framework [RF\_DDT.robot] script will be defined as
 follows:
@@ -739,10 +316,6 @@ screenshot shows the [Settings] section of the script:
 ![](./images/b538636d-ac3d-4c65-9da0-083b7cb705c9.png)
 
 
-
-Robot Framework settings
-
-
 The screenshot shows the steps definition of the Robot Framework in the
 RIDE editor:
 
@@ -758,7 +331,7 @@ To execute the robot Framework execute the following command:
 
 
 ```
-$ robot   RF_DDT.robot
+robot   RF_DDT.robot
 ```
 
 
@@ -775,42 +348,15 @@ Use this command to generate the ZAP report:
 
 
 ```
-$ zap-cli report -o   ZAP_Report.html  -f html
+zap-cli report -o   ZAP_Report.html  -f html
 ```
-
-
-
-
-
 
 
 
 Summary
 =======
 
-In this lab, we discussed various kinds of techniques to achieve API
-fuzz security testing. We have introduced the use of FuzzDB and seclist
-for the sources of data input. In addition, we also demonstrated the use
-of Radamsa, which allows us to dynamically generate fuzz data based on a
-specified data sample.
-
-For the API fuzz testing, we also demonstrated some automation
-frameworks and tools such as JMeter, Selenium/DDT, Robot Framework DDT,
-0d1n, Wfuzz, and integration with ZAP. During API fuzz testing, it\'s
-recommended to apply ZAP as a proxy to identify security issues. We
-demonstrated four different technical approaches.
-
-*Approach 1* is to do the testing using Wfuzz. It can do the fuzz
-testing with multiple parameters, and output a summary of response codes
-and the number of lines, words, and chars of every HTTP response. Wfuzz
-testing is a good candidate for login brute-force, directory traversal,
-and RESTful API testing.
-
-In *Approach 2*, we use 0d1n for fuzz testing, which is similar to
-Wfuzz. During testing, we specified [find\_string\_list] and
-executed OWASP ZAP to identify security issues based on HTTP responses.
-
-Selenium with DDT is demonstrated in *Approach 3*. The behavior is
+In this lab, Selenium with DDT is demonstrated . The behavior is
 mostly close to human behaviors due to the launch of browser and Web UI
 interaction behaviors. In the selenium script, we apply a DDT module to
 read the FuzzDB files for the input of username and password. OWASP ZAP
