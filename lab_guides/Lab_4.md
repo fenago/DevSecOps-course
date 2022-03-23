@@ -109,7 +109,7 @@ high-entropy value strings:
 
 
 ```
-python  DumpsterDiver.py   --entropy  3.095  -p   <TargetProjectPath>
+python  DumpsterDiver.py   --entropy  3.095  -p  ./vulnerable-api
 ```
 
 
