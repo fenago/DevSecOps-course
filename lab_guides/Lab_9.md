@@ -70,23 +70,7 @@ Python PIP package:
 python -m pip install robotframework
 ```
 
-
-In addition, it\'s suggested to install the Robot Framework IDE, called
-RIDE, which will help to edit the testing script easier. RIDE can be
-installed by using PIP. Once the installation is done, RIDE can be
-started by running [ride.py]:
-
-
-```
-pip install robotframework-ride
-```
-
-
-Once the installation of RIDE is done, execute [ride.py] to launch
-it.
-
-Once installation of Robot Framework is done, we may install
-[sqlmap] as follows:
+Once installation of Robot Framework is done, we may install [sqlmap] as follows:
 
 
 ```
@@ -203,40 +187,6 @@ Should Be Equal As Strings ${resp.status_code} 200
 ```
 
 
-If you are using **RIDE** (**Robot Framework Test Data Editor**), here
-is the script in text mode:
-
-
-![](./images/59bf7e29-9231-4a63-abdf-b99630c4ca38.png)
-
-
-
-
-Text view of a ZAP spider scan in Robot Framework
-
-
-Here is the table view of the script in RIDE:
-
-
-![](./images/7351ab4d-0a17-42c8-8751-ffcfeb6bb04d.png)
-
-
-
-
-Table view of a ZAP spider scan in Robot Framework
-
-
-Here are the required settings in RIDE:
-
-
-![](./images/54fc3330-2d76-4119-beef-7c3e9778f216.png)
-
-
-
-
-ZAP settings in Robot Framework
-
-
 Once the spider scan is done, the web security scanning results will be
 found at the following URL:
 
@@ -254,14 +204,6 @@ zapcli]:
 ```
 zap-cli report -o   ZAP_Report.html  -f html
 ```
-
-
-
-It\'s always recommended to use RIDE to edit the Robot Framework script
-although the script can also be edited by using notepad. In RIDE, you
-may mouse move over the keyword and press CTRL to present the detailed
-usage.
-
 
 
 

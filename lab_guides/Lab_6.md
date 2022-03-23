@@ -25,12 +25,6 @@ down ZAP:
 
 
 
-
-ZAP API testing in proxy mode
-
-
-
-
 Step 1 -- spider scanning the website
 =====================================
 
@@ -73,15 +67,6 @@ The following diagram shows the spider scan UI operations in ZAP:
 ![](./images/de0e1a5c-5e96-49e2-ab16-6629a772e298.png)
 
 
-
-
-ZAP spider API
-
-
-For Windows users, CURL can be downloaded here:
-<https://curl.haxx.se/windows/>.[](https://curl.haxx.se/windows/)
-
-
 The spider scan may take a long time since it will extensively and
 recursively search for any potential web URLs and resources. Besides,
 the time it takes also depends on the number of web pages, parameters,
@@ -111,25 +96,6 @@ curl     "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMe
 
 The URL of the active scan is
 [http://localhost:8090/UI/ascan/action/scan/].[](http://localhost:8090/UI/ascan/action/scan/)
-
-The key difference between the spider scan and the active scan is that
-the spider scan involves passive scanning, which entails monitoring
-security issues such as missing security headers, **cross-site request
-forgery** (**CSRF**) tokens and so on. On the other hand, the active
-scan will send malicious requests such as XSS or SQL injection to attack
-the target website. The spider scan will extensively search for web
-resources, and the active scan can do specific security testing based on
-the scan policy. During execution, using the spider scan to extensively
-explore the URLs and resources is the first step before triggering the
-active scan, since it will help the active scan with known URLs to do
-the security scanning:
-
-  ---------------------------------------- ------------------------------------------------------------------------------------------------------------------- -----------------------------------------------------------------------------------------------
-                                           **Spider scan**                                                                                                     **Active scan**
-  **Handling of requests and responses**   It\'s a passive scan, which means it monitors requests and responses for the security issues.                       As it\'s an active scan, it will send malicious requests, such as XSS or SQL injection.
-  **Purpose**                              Explores the whole site and monitors security issues. It\'s a preliminary step for any further security scanning.   Sends malicious requests and evaluates specific security issues based on the identified URLs.
-  ---------------------------------------- ------------------------------------------------------------------------------------------------------------------- -----------------------------------------------------------------------------------------------
-
 
 
 Step 3 -- reviewing the status of the active scan
@@ -298,229 +264,7 @@ CURL "http://127.0.0.1:8090/OTHER/core/other/htmlreport/?formMethod=GET" > ZAP_R
 echo shutdown the ZAP
 
 CURL "http://localhost:8090/JSON/core/action/shutdown/?zapapiformat=JSON&formMethod=GET"
-
-
 ```
-
-
-
-
-
-
-
-
-Case 3 -- automated security testing for the user registration flow with Selenium
-=================================================================================
-
-In the previous demo, we used ZAP to do a spider scan and an active
-scan. The purpose of the spider scan is to explore all potential URLs
-and web resources. However, there are some web resources that will
-require manual guidance, such as authenticated resources, user
-registration, or the shopping business flows.
-
-Therefore, we will need a web UI automation framework, such as Selenium,
-to guide ZAP through some of the web pages. A testing team who may
-previously finish the functional automation testing, it\'s suggested to
-apply the web security scanner, OWASP ZAP, in proxy mode to reuse the
-existing automation testing.
-
-In this case study, we use the user registration flow as an example to
-demonstrate how to apply a Selenium automation framework and ZAP for web
-security automation testing.
-
-We inspect security issues for the new user registration flow for the
-vulnerable shopping site at <http://hackazon.webscantest.com/>. The
-sign-up flow, [Sign Up] \| [New User], is
-as follows. The Selenium automation framework will do the following
-steps:
-
-1.  Visit the home page
-2.  Click [Sign Up] \| [New User]
-3.  Input the [First Name], [Last Name],
-    [Username], [Email Address],
-    [Password], and [Confirm Password]
-    values, and then click [Register]
-
-During the automated user registration execution by Selenium, we will
-launch ZAP as a proxy to monitor the security issues:
-
-
-![](./images/938c80e9-a4d2-4341-8ae8-2cbfd00898eb.png)
-
-
-
-
-Sign Up in NodeGoat
-
-
-To complete the automated security testing scenario, we will use
-SeleniumBase to launch the browser and simulate user behavior to guide
-ZAP through the registration flow, as shown in the following diagram:
-
-
-![](./images/d742dddf-231a-454e-821c-ce0a610d2ed2.png)
-
-
-
-
-Selenium and ZAP security testing
-
-
-
-
-Step 1 -- installation of SeleniumBase
-======================================
-
-Prepare the environment, to have the Python and pip setup tools ready.
-Refer to [Http://seleniumbase.com](http://seleniumbase.com/) for the
-installation of SeleniumBase, which is a wrapper of Selenium to make the
-implementation much easier:
-
-
-```
-git clone https://github.com/seleniumbase/SeleniumBase.git
-$ pip install -U -r requirements.txt
-$ python setup.py install
-```
-
-
-In addition, Selenium will require the related browser driver to be
-installed, as follows:
-
-
-```
-seleniumbase install chromedriver
-```
-
-
-
-
-Step 2 -- launching ZAP with proxy 8090
-=======================================
-
-Execute the following command to launch the ZAP on port [8090]:
-
-
-```
-ZAP   -port  8090
-```
-
-
-
-
-Step 3 -- executing the user registration flow automation
-=========================================================
-
-The following command will help us to execute the SeleniumBase script
-and launch the Chrome browser with the local proxy to the running ZAP:
-
-
-```
-pytest  userregistration_SB.py   --browser=chrome   --proxy=127.0.0.1:8090
-```
-
-
-Here is the script for [userregistration\_SB.py]. Please be
-reminded that the script can only be executed by SeleniumBase, instead
-of Selenium.
-
-For readers who may not be familiar with Selenium scripts, it\'s
-suggested to use the Katalon/Selenium IDE, which is a tool that allows
-you to record website operations and generate the script automatically.
-It can be installed as a Chrome or Firefox extension. In our case, we
-use the Katalon/Selenium IDE for the user registration flow and export
-in the Python 2 (WebDriver + unittest) format. Then, we use the
-[seleniumbase covert UserRegistration.py] command to get the
-following script:
-
-
-```
-# -*- coding: utf-8 -*-
-
-from seleniumbase import BaseCase
-class UserRegistration(BaseCase):
-
-    def test_user_registration(self):
-        self.open('http://hackazon.webscantest.com/')
-        self.click("link=Sign In / Sign Up")
-        self.click('#username')
-        self.click("link=New user?")
-        self.click('#first_name')
-        self.update_text('#first_name', 'FirstName')
-        self.update_text('#last_name', 'LastName')
-        self.update_text('#username', 'UserName1')
-        self.update_text('#email', 'abc@a.com')
-        self.update_text('#password', 'pass1234')
-        self.update_text('#password_confirmation', 'pass1234')
-        self.click("//input[@value='Register']")
-```
-
-
-
-
-Step 4 -- active scanning the identified URLs
-=============================================
-
-After the user registration UI flow walkthrough, ZAP will be able to
-identify more URLs.
-
-The active scan will be able to explore more security based on the newly
-identified URLs, as follows:
-
-
-```
-CURL "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://hackazon.webscantest.com&recurse=&inScopeOnly=&scanPolicyName=&method=&postData=&contextId="
-```
-
-
-
-
-Step 5 -- reviewing the security assessments
-============================================
-
-Once the automation execution is done, we may execute the following
-command to review the security assessments made by ZAP. The following
-RESTful API will generate the report in JSON format:
-
-
-```
-CURL "http://localhost:8090/JSON/core/view/alerts"
-```
-
-
-The following RESTful API will generate the report in HTML format:
-
-
-```
-CURL "http://localhost:8090/HTML/core/view/alerts"
-```
-
-
-If all these steps work, we may integrate all the commands into one
-script for further automation execution. Here is the summary of all the
-automation commands in one BAT script file,
-\"Auto\_ZAP\_UserRegistration.BAT\". Be reminded that we add a Windows
-timeout command to wait for the finish of the UI automation;
-[UserRegisterResult.html] will be the final security testing
-results.
-
-Execute the BAT script, \"Auto\_ZAP\_UserRegistration.BAT\" on Windows:
-
-
-```
-ZAP -port 8090
-
-$ pytest UserRegistration.py --browser=chrome --proxy=127.0.0.1:8090
-
-$ timeout /T 30
-
-$ CURL "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://hackazon.webscantest.com&recurse=&inScopeOnly=&scanPolicyName=&method=&postData=&contextId="
-
-$ timeout /T 30
-
-$ Curl "http://localhost:8090/HTML/core/view/alerts" > UserRegisterResult.html
-```
-
 
 
 

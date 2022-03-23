@@ -308,25 +308,6 @@ SignIn_DDT
  Close Browser
 ```
 
-
-In the Robot Framework RIDE, the script will look like this. This
-screenshot shows the [Settings] section of the script:
-
-
-![](./images/b538636d-ac3d-4c65-9da0-083b7cb705c9.png)
-
-
-The screenshot shows the steps definition of the Robot Framework in the
-RIDE editor:
-
-
-![](./images/dde26d61-c37f-4fe1-a4fe-444a0f3ba8fc.png)
-
-
-
-DDT Testing Script in Robot Framework
-
-
 To execute the robot Framework execute the following command:
 
 

@@ -35,9 +35,11 @@ provides the GUI to do remote scanning. The SCAP Workbench tool has been downloa
 Step 2 -- OpenSCAP security guide
 =================================
 
-Once the package MSI installer [scap-workbench-1.1.5-1.msi] is
-downloaded and installed, launch the [scap-workbench.exe]. It will
-ask you to load a security profile. We selected RHEL7 in our example.
+Launch the scap workbench located on Desktop:
+
+![](./images/s7.png)
+
+It will ask you to load a security profile. We selected RHEL7 in our example.
 You may specify the SSH host to do the scanning.
 
 The following screenshot shows how SCAP works:
