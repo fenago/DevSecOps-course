@@ -1,4 +1,7 @@
 from selenium import webdriver
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
+
 
 # Replace the 'self.driver = webdriver.Firefox()' with the following
 profile = webdriver.FirefoxProfile()

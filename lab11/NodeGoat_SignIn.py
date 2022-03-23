@@ -6,6 +6,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import unittest, time, re
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
 
 class SignIn(unittest.TestCase):
     def setUp(self):
@@ -24,7 +26,6 @@ class SignIn(unittest.TestCase):
         driver.find_element_by_xpath("//button[@type='submit']").click()
         driver.get("http://nodegoat.herokuapp.com/contributions")
         driver.get("http://nodegoat.herokuapp.com/allocations/2")
-        driver.get("http://nodegoat.herokuapp.com/memos")
         driver.get("http://nodegoat.herokuapp.com/profile")
     
     

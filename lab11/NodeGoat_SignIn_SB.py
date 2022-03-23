@@ -13,5 +13,4 @@ class SignIn(BaseCase):
         self.click("//button[@type='submit']")
         self.open('http://nodegoat.herokuapp.com/contributions')
         self.open('http://nodegoat.herokuapp.com/allocations/2')
-        self.open('http://nodegoat.herokuapp.com/memos')
         self.open('http://nodegoat.herokuapp.com/profile')
