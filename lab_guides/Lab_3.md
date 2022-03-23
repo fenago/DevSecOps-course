@@ -39,13 +39,18 @@ Execute the command with a parameter to specify the target project
 folder. The following command will scan the vulnerable source code under
 the [/vulnerable-api] folder:
 
+**Important:** Make sure to run this exercise from git bash:
+
+![](./images/s15.png)
+
 
 ```
-cd C:\Users\fenago\Desktop\DevSecOps-course\lab03
-
 bash  grep-it.sh  ./vulnerable-api
 ```
 
+Wait for scan to complete for few minutes.
+
+![](./images/s16.png)
 
 
 Step 3 -- reviewing the results
@@ -61,43 +66,46 @@ topic, as shown in the following diagram:
 ![](./images/69e424e8-7e0e-4481-8ff4-61509f002917.png)
 
 
+**Task:** Analyze all these files one by one:
+
+![](./images/s24.png)
 
 Automatic secure code inspection tools for Windows
 ==================================================
 
 
-For Windows users, the secure code scanning tool **Visual Code Grepper**
-(**VCG**) is recommended. It provides not only GUI but also CLI mode. It
-supports multiple programming languages, including C/C++, Java, PHP, VB,
-and C\#. The default installation comes with details on the predefined
-banned and risky functions of each programming language in the
-configuration files ([\*.conf]), and the rules can also be easily
-customized by editing the configuration files. Here are the steps to
-scan the project.
+Step: Executing VCG
+====================
+
+Search `VisualCodeGrepper` to directly launch VCG in GUI mode:
+
+![](./images/s17.png)
+
+![](./images/s18.png)
+
+Click **Settings** and select `Java`:
+
+![](./images/s19.png)
+
+Click **File** and select `New Target Directory`:
+![](./images/s20.png)
+
+![](./images/s21.png)
 
 
-Step 2: Executing VCG
-=====================
+Click **Scan** and select `Full Scan`:
 
-Executing [VisualCodeGrepper.exe] will directly launch VCG in GUI
-mode.
-
-If you would like to execute in console mode, use the following command:
-
-
-```
-VisualCodeGrepper    -c  -v  -t   <DirectoryName>
-```
-
+![](./images/s22.png)
 
 Step 3: Reviewing the VCG scanning results
 ==========================================
 
-By default, the scanning results will be generated as [test1.csv]
-under the installed path. Alternatively, you may also use the [VCG
-GUI] \| [File] \| [Import Results from CSV
-File] \| [test1.csv] to review the results with
-highlighted colors.
+**Output:**
+![](./images/s23.png)
+
+Click **File** and select `Export Results to CSV file`
+
+You may use the [VCG GUI] \| [File] \| [Import Results from CSV File] \| [test1.csv] to review the results with highlighted colors.
 
 
 
@@ -107,7 +115,6 @@ Summary
 In a case study of this lab, we demonstrated the use of CRASS
 to scan vulnerable Python APIs. Furthermore, we also introduced another
 generic general secure coding inspection tool, VCG.
-
 
 In the coming lab, we will apply similar code inspection techniques
 to look for sensitive information leakage and privacy security issues.

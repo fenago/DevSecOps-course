@@ -6,7 +6,7 @@ ZAP.exe   -daemon
 
 echo the status of ZAP
 
-CURL  http://localhsot:8090
+CURL  http://localhost:8090
 
 
 

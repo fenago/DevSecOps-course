@@ -92,6 +92,8 @@ Feature: Showing off behave # features/example.feature:2
 3 steps passed, 0 failed, 0 skipped, 0 undefined
 ```
 
+![](./images/s10.png)
+
 In the coming labs, we will demostrate the uses of Robot Framework to achieve the security automation testing.
 
 
@@ -103,20 +105,45 @@ Here are some tools that can generate testing data based on
 the user-defined data type or format such as (date, address, ID, numeric
 data or strings):
 
-Mockaroo	
+#### Mockaroo
+Open https://mockaroo.com/ in browser and click **Preview Data** to get generated data:
 
-https://mockaroo.com/
+![](./images/s11.png)
+
+**Task:** 
+
+1) Remove `ip_address` field by clicking `X`.
+2) Add three new fields by clicking `Add Another Field` button.
+3) Click **Type** dropdown and select different Type from menu for all new fields:
+
+![](./images/s12.png)
 
 
+#### JSON Schema Faker
+Open http://json-schema-faker.js.org/ in browser and click **Options** link to get follow menu:
 
-JSON Schema Faker
-http://json-schema-faker.js.org/
-
-
-JS Faker	
-
-This provides a command-line interface (CLI) to generate the data type based on your options, such as system, name, address, and phone. It can also output based on the specified locale language.
+![](./images/s13.png)
 
 
-https://github.com/lestoni/faker-cli
+Click **Enum** from above menu and it will take you following screen. Click Generate to generate test data:
 
+![](./images/s14.png)
+
+**Task:** 
+
+1) Change minItems to `10` and change items names in enum and click Generate button again.
+2) Click Options links and try different options i-e; **boolean** and **integer** etc.
+
+#### JS Faker	
+
+This provides a command-line interface (CLI) to generate the data type based on your options, such as system, name, address, and phone. It can also output based on the specified locale language. It has been installed already: https://github.com/lestoni/faker-cli
+
+Open terminal and try following examples:
+
+```
+faker-cli --helpers userCard
+
+faker-cli --random uuid
+
+faker-cli --locale de --helpers userCard
+```

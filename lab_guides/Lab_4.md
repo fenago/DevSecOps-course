@@ -22,12 +22,8 @@ indicate the results.
 Step 1 -- installing The Silver Searcher
 ========================================
 
-The Silver Searcher providers installation details for different
-platforms:
-<https://github.com/ggreer/the_silver_searcher>.[](https://github.com/ggreer/the_silver_searcher)
-
-For Windows releases, the tool can be downloaded here:
-<https://github.com/k-takata/the_silver_searcher-win32/releases>.[](https://github.com/k-takata/the_silver_searcher-win32/releases)
+The Silver Searcher has been downlaoded in the lab environment:
+https://github.com/k-takata/the_silver_searcher-win32/releases
 
 
 
@@ -36,10 +32,12 @@ Step 2 -- executing the tool (using Windows as an example)
 
 Use [ag -h] to display all the options and usage in the console.
 In this case, we will use [-w] to match the keyword, [md5].
-The AG tool can be executed as follows:
+The AG tool can be executed in the `cmd` terminal as follows:
 
 
 ```
+cd C:\Users\fenago\Desktop\DevSecOps-course\lab04
+
 ag –w md5 ./vulnerable-api
 ```
 
@@ -70,13 +68,8 @@ is normally an indicator of a potential API key, hash value, or
 encrypted message. In the following demonstration, we will also use the
 vulnerable Python API project to search for vulnerable API keys in the
 source code. The tools we will be using are [entropy.py] and
-[DumpsterDiver]. To download the script, execute the following
-command:
+[DumpsterDiver] https://github.com/securing/DumpsterDiver
 
-
-```
-git clone https://github.com/securing/DumpsterDiver
-```
 
 Step 1 -- calculating the entropy
 =================================
@@ -88,7 +81,10 @@ value of that known API key will help to identify another unknown key
 with higher accuracy. In this case, we\'re assuming the known API key is
 [ZeXvRCRZ3LF]:
 
-`python  entropy.py   ZeXvRCRZ3LF`
+```
+cd C:\Users\fenago\Desktop\DevSecOps-course\lab04\DumpsterDiver
+python  entropy.py   ZeXvRCRZ3LF
+```
 
 
 The output of the entropy calculation will be done by DumpsterDiver. The
@@ -109,7 +105,7 @@ high-entropy value strings:
 
 
 ```
-python  DumpsterDiver.py   --entropy  3.095  -p  ./vulnerable-api
+python  DumpsterDiver.py   --entropy  3.095  -p  ../grep-it.sh
 ```
 
 
@@ -152,7 +148,7 @@ To set up PrivacyScore locally, refer to
 <https://github.com/PrivacyScore/PrivacyScore/>.[](https://github.com/PrivacyScore/PrivacyScore/)
 
 Input the target vulnerable website,
-[http://hackazon.webscantest.com/], and click
+[http://demo.testfire.net/], and click
 [SCAN], as shown in the following screenshot. The
 scanning will be triggered and will run on the cloud:
 

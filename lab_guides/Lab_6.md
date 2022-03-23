@@ -4,11 +4,8 @@ Web Application Security Testing
 
 In this lab, we will cover the following topics:
 
--   Case 1---web security testing using the ZAP REST API
--   Case 2---full automation with CURL and the ZAP daemon
--   Case 3---automated security testing for the user registration flow
-    using Selenium
-
+-   Case 1 --- web security testing using the ZAP REST API
+-   Case 2 --- full automation with CURL and the ZAP daemon
 
 Case 1 -- web security testing using the ZAP REST API
 =====================================================
@@ -48,6 +45,7 @@ Here is the command to execute the spider scan by [CURL]:
 curl   "http://localhost:8090/JSON/spider/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://demo.testfire.net&maxChildren=&recurse=&contextName=&subtreeOnly="
 ```
 
+![](./images/s32.png)
 
 To get further information for the HTTP [GET] request for the
 spider scan, we can use the browser to visit the ZAP URL:
@@ -66,17 +64,15 @@ The following diagram shows the spider scan UI operations in ZAP:
 
 ![](./images/de0e1a5c-5e96-49e2-ab16-6629a772e298.png)
 
+Click **Scan** to run new scan. You will get scan number on success (you might get different scan number):
+
+![](./images/s33.png)
+
 
 The spider scan may take a long time since it will extensively and
 recursively search for any potential web URLs and resources. Besides,
 the time it takes also depends on the number of web pages, parameters,
-and the number of threads. When it takes too long to complete, you may
-also configure the spider scan options under [Tools] \|
-[Options] \| [Spider], where you may
-configure [Maximum depth to crawl] or [Number of threads
-used].
-
-
+and the number of threads.
 
 
 Step 2 -- active scanning the website
@@ -168,29 +164,15 @@ OWASP ZAP in the following order for a complete testing cycle:
 Step 1 -- executing ZAP in daemon (headless) mode
 =================================================
 
-To launch ZAP in daemon mode, execute the following commands in the
-console.
-
-For Windows, execute the following:
-
+To launch ZAP in daemon mode, close `ZAP GUI` and then execute the following commands in the terminal:
 
 ```
+cd C:\Program Files\OWASP\Zed Attack Proxy
+
 ZAP.bat -daemon
 ```
 
-
-For Linux, execute the following:
-
-
-```
-ZAP.sh  -daemon
-```
-
-
-For ZAP command-line options and usage, refer to
-<https://github.com/zaproxy/zap-core-help/wiki/HelpCmdline>.[](https://github.com/zaproxy/zap-core-help/wiki/HelpCmdline)
-
-
+![](./images/s34.png)
 
 Step 2 -- checking the status of the ZAP daemon
 ===============================================
@@ -198,14 +180,10 @@ Step 2 -- checking the status of the ZAP daemon
 In our testing environment, our ZAP proxy is configured using port
 [8090]. The proxy port can be configured from the ZAP GUI menu
 under [Tools] \| [Options] \| [Local
-Proxies.] Use the following commands to check if it\'s
-running normally:
+Proxies.] Open following URL in browser to check if it\'s running normally:
 
 
-```
-Curl   http://localhost:8090/
-```
-
+![](./images/s35.png)
 
 
 
@@ -214,21 +192,21 @@ Step 3 -- fully automating the ZAP API
 
 The whole scanning process can be fully automated in one script file.
 Here, we use the Windows BAT script as an example. The fully automated
-ZAP security testing script for the Hackazon website is named
+ZAP security testing script for the website is named
 [AutoZAP.BAT]:
 
 
 ```
 echo start the ZAP in daemon mode
 
-ZAP.exe -daemon
+cd C:\Program Files\OWASP\Zed Attack Proxy
 
+ZAP.exe -daemon
 
 
 echo the status of ZAP
 
-CURL http://localhsot:8090
-
+CURL http://localhost:8090
 
 
 echo spider scan for the web site

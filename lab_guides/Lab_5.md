@@ -25,8 +25,8 @@ Step 1 -- OWASP ZAP launch with port 8090
 =========================================
 
 The OWASP ZAP installer has been installed in the lab environment
-<https://github.com/zaproxy/zaproxy/wiki/Downloads> depending on the
-platform. Click the dollowing icon on Desktop, launch ZAP in GUI mode.
+<https://github.com/zaproxy/zaproxy/wiki/Downloads> . Click the following icon on Desktop, 
+launch ZAP in GUI mode.
 Although ZAP can also be executed in daemon mode, the GUI mode will help
 us to review the security assessment results. 
 
@@ -71,13 +71,18 @@ in the following order:
 
 ```
 zap-cli  spider       http://demo.testfire.net
-$ zap-cli  quick-scan   http://demo.testfire.net
-$ zap-cli  active-scan  http://demo.testfire.net
+
+zap-cli  quick-scan   http://demo.testfire.net
+
+zap-cli  active-scan  http://demo.testfire.net
 ```
 
+![](./images/s25.png)
 
 If it works well, you should be able to see the list of scanned URLs and
 alters in the ZAP GUI.
+
+![](./images/s26.png)
 
 For other command options, the [\--help] can be used, as follows:
 
@@ -110,16 +115,7 @@ alerts at the medium level:
 zap-cli alerts -l Medium
 ```
 
-
-For the usage of [alerts] options, try the following command:
-
-
-```
-zap-cli   alerts  --help
-```
-
-
-
+![](./images/s27.png)
 
 Case study 2 -- intermediate -- API testing with ZAP and JMeter
 ===============================================================
@@ -139,12 +135,7 @@ and ZAP:
 ![](./images/d11f05b2-7d3a-4518-babe-4f378ea4c3d9.png)
 
 
-
-JMeter and ZAP security testing
-
-
 To proceed with the testing, follow these steps.
-
 
 
 Step 1 -- Launch JMeter
@@ -162,6 +153,8 @@ jmeter.bat
 
 Step 2 -- define HTTP request for the login
 ===========================================
+
+**Solution:** JMX file has been saved in `C:\Users\fenago\Desktop\DevSecOps-course\lab05\MyPostRequest.jmx`
 
 In this step, we will define the HTTP POST request for login to the
 vulnerable website. Here is key information of the HTTP [POST]
@@ -186,24 +179,12 @@ following screenshot:
 ![](./images/24555097-e4d8-428e-a29b-a88196a6ee97.png)
 
 
-
-
-HTTP request configuration in JMeter
-
-
 In addition, we would like to send the HTTP request through the ZAP
 proxy. Define the JMeter proxy in the [Advanced] tab. In
 our environment, we are running ZAP listening port [8090]:
 
 
 ![](./images/7388d1b7-0307-43e7-9778-39dab896394f.png)
-
-
-
-
-HTTP request proxy configuration in JMeter
-
-
 
 
 Step 4 -- execute the JMeter script
@@ -222,6 +203,8 @@ case, the following command will apply to our JMeter script. Use [JMeter
 
 
 ```
+cd C:\Users\fenago\Desktop\DevSecOps-course\lab05
+
 Jmeter  -n  -t  MyPostRequest.jmx  -l  testPostResult.jtl  -H 127.0.0.1  -P 8090
 ```
 
@@ -250,6 +233,9 @@ format:
 CURL   "http://localhost:8090/HTML/core/view/alerts"
 ```
 
+**Note:** You can also open above URL in browser
+
+![](./images/s29.png)
 
 
 
@@ -296,6 +282,10 @@ or 2 > 1
 Step 2 -- define the CSV dataset in JMeter
 ==========================================
 
+
+**Solution:** JMX file has been saved in `C:\Users\fenago\Desktop\DevSecOps-course\lab05\MyRequest.jmx`
+
+
 To add a CSV dataset, right-click the [Test Plan] \|
 [Add] \| [Config Element] \| [CSV Data Set
 Config]. In the [CSV Data Set Config], we
@@ -338,13 +328,6 @@ count as [10]:
 ![](./images/af0cf6da-a8d2-45f1-9e66-4a85a9e00702.png)
 
 
-
-
-Thread group in JMeter
-
-
-
-
 Step 5 -- execute JMeter and review the security assessment results
 ===================================================================
 
@@ -371,27 +354,6 @@ CURL "http://localhost:8090/JSON/core/view/alerts" > LoginTesting.JSON
 
 CURL "http://localhost:8090/HTML/core/view/alerts" > LoginTesting.HTML
 ```
-
-
-The following diagram shows the [Alerts] after sending
-the SQL injection payloads to the login API, especially the [Application
-Error Disclosure] parts:
-
-
-![](./images/6bdca872-804d-4750-bded-a66d290c518b.png)
-
-
-
-In this case, we target the login API for the testing of SQL injection
-vulnerability. We apply JMeter to read external FuzzDB resources for the
-SQL injection data input and define the CSV data in JMeter for the
-parameterized testing of the password variable. Once the various SQL
-injection data payloads were sent by JMeter through the ZAP proxy, we
-review the security assessments in ZAP. Other security payloads, such as
-XSS, XXE, or command injection, can also apply to the same login API for
-further testing. On the other hand, we can use similar approaches to
-test other APIs.
-
 
 
 Case study 4 -- security testing with ZAP Open/SOAP API
@@ -423,13 +385,10 @@ Zap  -addoninstall  soap  -addoninstall  openapi
 ```
 
 
-If the installation is successful, the following command will be able to
-output the HTML message in the console:
+Open http://localhost:8090/UI/openapi/ in Chrome to verify:
 
 
-```
-CURL  "http://localhost:8090/UI/openapi/"
-```
+![](./images/s28.png)
 
 
 
@@ -452,19 +411,12 @@ CURL "http://localhost:8090/JSON/openapi/action/importUrl/?zapapiformat=JSON&for
 It may take a while to import the APIs. Once it\'s done, you will see
 the API list in the ZAP console as shown in the following diagram:
 
-
 ![](./images/f4108643-af17-456e-b0aa-06d9f188e6f6.png)
-
-
-
-
-API security in ZAP
-
 
 Alternatively, you can also import the API by browser using the
 following URL:
 
-[http://localhost:8090/UI/openapi/action/importUrl/ ]
+http://localhost:8090/UI/openapi/action/importUrl/
 
 
 
@@ -480,7 +432,7 @@ CURL  "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMetho
 ```
 
 
-
+![](./images/s30.png)
 
 Step 4 -- present the security assessments
 ==========================================
@@ -491,8 +443,9 @@ follows:
 
 
 ```
- CURL "http://localhost:8090/JSON/core/view/alerts"
-$  CURL  "http://localhost:8090/HTML/core/view/alerts"
+CURL "http://localhost:8090/JSON/core/view/alerts"
+
+CURL  "http://localhost:8090/HTML/core/view/alerts"
 ```
 
 
@@ -505,14 +458,12 @@ CURL "http://localhost:8090/JSON/core/view/alerts/?zapapiformat=JSON&formMethod=
 ```
 
 
-The following command will generate HTML format results:
+Open following URL to get HTML format results:
+
+http://localhost:8090/HTML/core/view/alerts/?zapapiformat=HTML&formMethod=GET&baseurl=https://petstore.swagger.io&start=&count=&riskId=
 
 
-```
-CURL "http://localhost:8090/HTML/core/view/alerts/?zapapiformat=HTML&formMethod=GET&baseurl=https://petstore.swagger.io&start=&count=&riskId="
-```
-
-
+![](./images/s31.png)
 
 
 Summary
