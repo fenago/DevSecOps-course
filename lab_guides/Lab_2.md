@@ -14,6 +14,7 @@ HTTP mock server
 ================
 
 In this task, we will setup and run "moco" https://github.com/dreamhead/moco .
+
 `moco-runner-1.3.0-standalone.jar` has been downloaded already in `lab02` folder.
 
 Run following commands in the cmd to start mock server:
@@ -26,11 +27,14 @@ java -jar moco-runner-1.3.0-standalone.jar http -p 12306 -c foo.json
 
 Open http://localhost:12306 in Chrome after starting mock server.
 
+![](./images/s8.png)
+
 **Exercises**
 
 1) Update `foo.json` to return your name in response as show below:
-1) Change port to 12307 and restart the server.
+2) Change port to 12307 and restart the server.
 
+![](./images/s9.png)
 
 Behavior-driven development testing frameworks
 ==============================================
