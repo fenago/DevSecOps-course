@@ -12,13 +12,13 @@ CURL  http://localhsot:8090
 
 echo spider scan for the web site
 
-CURL  "http://localhost:8090/JSON/spider/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://hackazon.webscantest.com"
+CURL  "http://localhost:8090/JSON/spider/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://demo.testfire.net"
 
 
 
 echo Active Scan for the website
 
-CURL   "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://hackazon.webscantest.com&recurse=&inScopeOnly=&scanPolicyName=&method=&postData=&contextId="
+CURL   "http://localhost:8090/JSON/ascan/action/scan/?zapapiformat=JSON&formMethod=GET&url=http://demo.testfire.net&recurse=&inScopeOnly=&scanPolicyName=&method=&postData=&contextId="
 
 
 
