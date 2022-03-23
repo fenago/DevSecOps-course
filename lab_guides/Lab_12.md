@@ -40,20 +40,8 @@ security analysis proxy role between the testing tools and the web:
 Step 1 -- installing Radamsa
 ============================
 
-For the Windows version, the tool can be downloaded here:
+radamsa.exe has been downloaded from here:
 <https://github.com/vah13/radamsa/releases>.
-
-For the Linux version, refer to the following:
-
-
-```
-git clone  https://gitlab.com/akihe/radamsa
-$ cd radamsa
-$ make
-$ sudo make install 
-$ radamsa --help
-```
-
 
 
 
@@ -62,43 +50,34 @@ Step 2 -- generating the Security Random Payloads
 
 Here are some examples of data generation based on a given data sample:
 
--   Generating email-format fuzz data:
+- Generating email-format fuzz data:
 
 
 ```
-      $ echo "abc@test.com" | radamsa -n 5 --patterns od
+echo "abc@test.com" | radamsa -n 5 --patterns od
 ```
 
-
--   Generating SQL injection-related fuzz data:
-
-
-```
-      $ echo "' or 1=1" | radamsa -n 5 --patterns od
-```
-
-
--   Generating JavaScript injection data:
+- Generating JavaScript injection data:
 
 
 ```
-      $ echo "<script>alert(1)</script>" | radamsa -n 5 --patterns od
+echo "<script>alert(1)</script>" | radamsa -n 5 --patterns od
 ```
 
 
--   Generating the [XXX-XXX-XXXX] format-based fuzz data:
+- Generating the [XXX-XXX-XXXX] format-based fuzz data:
 
 
 ```
-      $ echo "154-541-3214" | radamsa -n 5 --patterns od
+echo "154-541-3214" | radamsa -n 5 --patterns od
 ```
 
 
--   Generating date-format fuzz data:
+- Generating date-format fuzz data:
 
 
 ```
-      $ echo "1977-12-01" | radamsa -n 5 --patterns od
+echo "1977-12-01" | radamsa -n 5 --patterns od
 ```
 
 
@@ -107,30 +86,11 @@ a sample input. Then, we can use that generated fuzz data as data input
 sources for further security testing.
 
 
-Should I use FuzzDB or Radamsa? FuzzDB provides security data payloads
-for various kinds of security testing, such as SQL injection, XXE, XSS,
-and command injection. It\'s recommended you use FuzzDB for security
-testing. On the other hand, we use Radamsa to generate formatted data to
-test unexpected behaviors such as username, ID, telephone number,
-address, and date.
-
-
-
-
-
-
-
-
-
-
-
-
 
 API fuzz testing with Automation Frameworks
 ===========================================
 
-In Lab 5,
-*Security API and Fuzz Testing*, we demonstrated how to use JMeter to do
+In Lab 5, *Security API and Fuzz Testing*, we demonstrated how to use JMeter to do
 fuzz testing with OWASP ZAP. In this lab, we will demonstrate other
 techniques using Selenium/ **data-driven testing** (**DDT**).
 
@@ -219,7 +179,6 @@ class NodeGoatSignIn(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
-
 ```
 
 
@@ -242,6 +201,8 @@ while, since it will launch and close Firefox for every request:
 
 
 ```
+cd C:\Users\fenago\Desktop\DevSecOps-course\lab12
+
 pytest   SignIn_DDT_NodeGoat.py  --proxy=127.0.0.1:8090
 ```
 
@@ -275,8 +236,6 @@ Step -- Robot Framework script
 
 To complete the testing scenario, here are some major robot framework
 keywords used in this case:
-
-To Do:
 
 ![](./images/s5.png)
 
@@ -312,9 +271,12 @@ To execute the robot Framework execute the following command:
 
 
 ```
+cd C:\Users\fenago\Desktop\DevSecOps-course\lab12
+
 robot   RF_DDT.robot
 ```
 
+![](./images/s51.png)
 
 The Robot Framework itself has limited capability to analyze security
 issues in HTTP responses. Therefore, it\'s suggested to configure OWASP

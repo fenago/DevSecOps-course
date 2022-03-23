@@ -265,14 +265,18 @@ pytest "NodeGoat_SignIn_SB.py" --proxy=127.0.0.1:8090
 
 
 
+![](./images/s50.png)
+
 When the testing is stable, it\'s suggested to execute the selenium
 testing script in headless mode. It means the testing will proceed
 without launching a real browser. It will simulate the execution in
 memory. This will improve the testing stability and cycle. For the uses
-of SeleniumBASE, specify the headless option, for example, [pytest
-my\_test.py \--headless \--browser=chrome].
+of SeleniumBASE, specify the headless option, for example:
 
 
+```
+pytest "NodeGoat_SignIn_SB.py" --proxy=127.0.0.1:8090 --headless --browser=chrome
+```
 
 
 Step 3 -- generate ZAP report
@@ -347,6 +351,10 @@ mainly need JMeter, ZAP, and FuzzDB.
 Step 2 -- define the JMeter scripts
 ===================================
 
+
+**Solution:** JMX file has been saved in `C:\Users\fenago\Desktop\DevSecOps-course\lab11\NodeGoat.jmx`
+
+
 Using JMeter can be very complex. In our case, we will only use parts of
 the necessary elements to complete the testing scenario. This table
 lists the use of JMeter elements in our case and also the configuration
@@ -419,7 +427,7 @@ by using the [-H]:
 ```
 cd C:\Users\fenago\Desktop\DevSecOps-course\lab11
 
-jmeter    -n   -H   localhost -P   8090   -t    NodeGoat.jmx      -l    NodeGoat_result.jtl  -j  NodeGoat_result.log    
+jmeter    -n   -H   localhost -P   8090   -t    NodeGoat.jmx      -l    NodeGoat_result.jtl  -j  NodeGoat_result.log
 ```
 
 
@@ -466,15 +474,3 @@ to guide ZAP for authenticated pages and other web UI flows. Selenium
 can launch the browser to simulate a user\'s web operation behavior.
 JMeter sends the HTTP requests and asserts the HTTP responses for the
 API-level user sign-in flow.
-
-For the selenium approach, it\'s suggested to use the Selenium IDE to
-record the sign-in operations and export to a Python unit test script.
-Once the script is generated, we execute the Selenium script with the
-OWASP ZAP proxy to identify the security issues.
-
-For the adoption of JMeter, [CSV Data Set Config] is used
-to read all the values from a CSV file. [HTTP Cookie
-Manager] is applied to manage the authenticated session.
-[HTTP Request] is used to send HTTP
-[POST]/[GET] requests to the website. Then, the JMeter
-script is executed in CLI mode with specified the proxy to OWASP ZAP.

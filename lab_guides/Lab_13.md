@@ -96,19 +96,20 @@ project scan:
 
 
 ```
+cd C:\Users\fenago\Downloads\dependency-check\bin
+
 dependency-check --project WebGoat --format XML --scan C:\Users\fenago\Desktop\DevSecOps-course\lab13\WebGoat
 
 dependency-check --project WebGoat --format HTML --scan C:\Users\fenago\Desktop\DevSecOps-course\lab13\WebGoat
 ```
 
+![](./images/s52.png)
+
+![](./images/s53.png)
+
 
 The XML report format can be useful to import into other security
 management tools.
-
-It will take a while to download the NVD CVE. If you would like to do
-the scan without downloading the NVD CVE, you may specify the
-[\--noupdate] option.
-
 
 
 Step 3 -- review the OWASP dependency-check report
@@ -119,9 +120,7 @@ After the scan, the report will be generated under the
 [dependency-check-report.html] and the
 [dependency-check-report.xml]:
 
-
-![](./images/fb1779af-ed27-44c5-89bb-51c46ae2494d.png)
-
+![](./images/s54.png)
 
 
 Secure communication scan with SSLScan
@@ -132,21 +131,16 @@ configurations with HTTPS. The tool we will be using is SSLScan. Follow
 these steps to perform the scan.
 
 
-
-Step 1 -- SSLScan setup
-=======================
-
-To Do:
-
-
-Step 2 -- SSLScan scan
-======================
+Step -- SSLScan scan
+=====================
 
 To execute sslscan, we will specify the output as XML, and also specify
 the target website\'s URL:
 
 
 ```
+cd C:\Users\fenago\Desktop\DevSecOps-course\lab13
+
 sslscan --no-failed --xml=nodegoat_SSLscan.xml  nodegoat.kerokuapp.com
 ```
 
@@ -293,7 +287,7 @@ To execute the robot Framework script, use the following command:
 
 
 ```
-robot    nmap_NodeGoat.robot
+robot  nmap_NodeGoat.robot
 ```
 
 
