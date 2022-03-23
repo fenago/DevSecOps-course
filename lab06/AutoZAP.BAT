@@ -1,9 +1,3 @@
-echo start the ZAP in daemon mode
-
-ZAP.exe   -daemon
-
-
-
 echo the status of ZAP
 
 CURL  http://localhost:8090

@@ -42,13 +42,19 @@ launched with the [start\_serpico.bat] script:
 
 
 ```
-cd Serpico
+cd C:\Serpico
 
 start_serpico.bat
 ```
 
-Then, use a browser to visit [https://localhost:8443/].
+![](./images/s43.png)
 
+Run the above script and press `Enter` key. Then, use a browser to visit [https://localhost:8443/].
+
+*Username:* administrator
+*Password:* oaqqtbai0a
+
+![](./images/s44.png)
 
 
 Step 2 -- Create a Report based on Templates

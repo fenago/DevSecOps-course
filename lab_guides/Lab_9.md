@@ -21,6 +21,8 @@ The following topics are to be covered in this lab:
 Adoption of Robot Framework with sqlmap
 =======================================
 
+**Note:** https://github.com/sqlmapproject/sqlmap.git has been cloned in `lab09\sqlmap-dev` folder.
+
 Let\'s take SQL injection testing as a simple example to see the effects
 of Robot Framework adoption. As the business objective, we would like to
 avoid any SQL injection attacks, which may result in authentication
@@ -28,10 +30,10 @@ bypasses, information leakage, authorization bypasses, and command
 injection. Before integration with Robot Framework, SQL injection
 execution by [sqlmap] will be as follows:
 
-To Do:
-
 ```
-python sqlmap.py   -u    "http://demo.testfire.net/"    -- batch    --banner
+cd C:\Users\fenago\Desktop\DevSecOps-course\lab09\sqlmap-dev
+
+python sqlmap.py   -u   "http://demo.testfire.net/"    --batch    --banner --forms --crawl=2
 ```
 
 
@@ -61,24 +63,7 @@ to define the testing steps.
 Step 1 -- Robot Framework setup and preparation
 ===============================================
 
-Robot Framework is implemented with Python, and supported on both Python
-2 and Python 3. The easiest way to install Robot Framework is by the
-Python PIP package:
-
-
-```
-python -m pip install robotframework
-```
-
-Once installation of Robot Framework is done, we may install [sqlmap] as follows:
-
-
-```
-git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
-```
-
-
-
+Robot Framework is implemented with Python and has been installed using pip.
 
 Step 2 -- sqlmap with Robot Framework
 =====================================
@@ -105,10 +90,6 @@ expected testing results. Here you can see the difference that the
 adoption of Robot Framework makes. Robot Framework is a keyword-driven
 acceptance testing framework that is able to describe the testing steps
 with well-defined expected results.
-
-Furthermore, Robot Framework is also flexible enough to define other
-user-defined keywords and variables, to make its output more
-understandable.
 
 
 
@@ -217,18 +198,14 @@ Execute the following commands under the CLI console:
 robot    "ZAP RequestsSample.robot"
 ```
 
+![](./images/s47.png)
+
+
+**Note:** Make sure ZAP is running before executing above script.
 
 Once the execution is done, the Robot Framework testing report will be
 generated under the same folder of the robot script. [output.xml],
 [log.html], and [report.html] will be generated.
-
-
-
-
-
-
-
-
 
 
 

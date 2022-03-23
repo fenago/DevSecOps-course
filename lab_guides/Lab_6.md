@@ -177,14 +177,9 @@ ZAP.bat -daemon
 Step 2 -- checking the status of the ZAP daemon
 ===============================================
 
-In our testing environment, our ZAP proxy is configured using port
-[8090]. The proxy port can be configured from the ZAP GUI menu
-under [Tools] \| [Options] \| [Local
-Proxies.] Open following URL in browser to check if it\'s running normally:
-
+In our testing environment, our ZAP proxy is configured using port `8090`. Open following URL in browser to check if it\'s running normally:
 
 ![](./images/s35.png)
-
 
 
 Step 3 -- fully automating the ZAP API
@@ -192,18 +187,10 @@ Step 3 -- fully automating the ZAP API
 
 The whole scanning process can be fully automated in one script file.
 Here, we use the Windows BAT script as an example. The fully automated
-ZAP security testing script for the website is named
-[AutoZAP.BAT]:
+ZAP security testing script for the website is named `AutoZAP.BAT`:
 
 
 ```
-echo start the ZAP in daemon mode
-
-cd C:\Program Files\OWASP\Zed Attack Proxy
-
-ZAP.exe -daemon
-
-
 echo the status of ZAP
 
 CURL http://localhost:8090
@@ -244,6 +231,14 @@ echo shutdown the ZAP
 CURL "http://localhost:8090/JSON/core/action/shutdown/?zapapiformat=JSON&formMethod=GET"
 ```
 
+
+Run the following commands in the cmd terminal to run automated scan. Make sure zap daemon is running first.
+
+```
+cd C:\Users\fenago\Desktop\DevSecOps-course\lab06
+
+AutoZAP.BAT
+```
 
 
 Summary

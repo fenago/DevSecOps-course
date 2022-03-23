@@ -59,6 +59,33 @@ listed in the following table:
 
 ![](./images/s3.png)
 
+Open terminal and run all nmap commands and observe their output:
+
+- Fast scan for listening ports
+
+`nmap -F --open -Pn demo.testfire.net`
+
+- Scan for any missing HTTP security headers such as XSS-Protection
+
+`nmap -p80 --script http-security-headers -Pn demo.testfire.net`
+
+- DOS attack with HTTPS Slowloris
+
+`nmap -p80,443 --script http-slowloris --max-parallelism 500 -Pn demo.testfire.net`
+
+- Scanning for all TCP listening ports
+
+`nmap -p1-65535 --open -Pn demo.testfire.net`
+
+- Scanning for all UDP listening ports
+
+`nmap -p1-65535 -sU --open -Pn demo.testfire.net`
+
+- Scanning for common ports
+
+`Nmap -p21, 23,80, 137,138, 443, 445, 1433, 3306, 1521, 3389 --open pPn demo.testfire.net`
+
+**Note:** Some of above scans will take time to complete.
 
 Known vulnerable components scan by OWASP dependency check
 ==========================================================
@@ -72,38 +99,32 @@ Step 1 -- installation of OWASP dependency check
 ================================================
 
 The OWASP dependency check provides JAR, which can be executed under
-command line. It also provides Marven, Gradle, and Jenkins plugins. In
-our example, to reduce any required dependencies, we will use the
-command-line version for the demonstration. Download the ZIP file and
-unzip it, as follows:
-
-<https://www.owasp.org/index.php/OWASP_Dependency_Check>.
-
+command line.
 
 
 Step 2 -- CVE scanning with OWASP dependency check
 ==================================================
 
-In our demonstration, we specify to scan the [d:\\tools\\Jmeter5],
+In our demonstration, we specify to scan the [C:\Users\fenago\Downloads\apache-jmeter-5.4.3],
 and output the testing report under existing folder which will be
 [\\dependency-check\\bin], as follows:
 
 
 ```
-dependency-check.bat   --project   Testing   --out   .   --scan   d:\tools\Jmeter5
+cd C:\Users\fenago\Downloads\dependency-check\bin
+
+dependency-check.bat   --project   Testing   --out   .   --scan  C:\Users\fenago\Downloads\apache-jmeter-5.4.3
 ```
 
+**Note:** It will take few minutes to complete the scan.
 
-The following screenshot shows the execution results of executing the
-listed command:
-
+The following screenshot shows the execution results of executing the listed command:
 
 ![](./images/45a54877-65d7-49d6-bb34-fb61d4a51d83.png)
 
 
 Once the scanning is done, you may find the
-[dependency-check-report.html] under the
-[\\dependency-check\\bin].
+[dependency-check-report.html] under the [\\dependency-check\\bin].
 
 Here is the sample of dependency check output HTML report:
 
@@ -136,10 +157,10 @@ To execute the SSLyze under Windows, refer to the following command:
 sslyze demo.testfire.net
 ```
 
+**Task:** Try commands shown in the above table.
 
 The [sslyze \--help] will list the detailed usage of each command
 option:
-
 
 ![](./images/732cd8d2-ff31-4fe8-aa34-bae0399e182d.png)
 

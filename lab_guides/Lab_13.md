@@ -30,14 +30,7 @@ in the following steps.
 Step 1 -- install RetireJS
 ==========================
 
-The installation of RetireJS requires us to use [npm]:
-
-
-```
-npm install -g retire
-```
-
-
+RetireJS has been installed in the lab environment using `npm`
 
 
 Step 2 -- scan with RetireJS
@@ -49,10 +42,10 @@ In our example, we will scan the whole project under the
 
 
 ```
+cd C:\Users\fenago\Desktop\DevSecOps-course\lab13
+
 retire   --path   ./NodeGoat/    --colors
 ```
-
-
 
 
 Step 3 -- review the retireJS results
@@ -61,11 +54,7 @@ Step 3 -- review the retireJS results
 The RetireJS scanning results show critical issues in red. There are two
 major known vulnerabilities with these JavaScript libraries:
 
-  ----------------- -------------- ----------------
-  **Component**     **Severity**   **CVE**
-  jquery 1.10.2     Medium         CVE-2015-9251
-  bootstrap 3.0.0   Medium         CVE-2018-14041
-  ----------------- -------------- ----------------
+![](./images/s48.png)
 
 The following screenshot shows the retireJS scanning results for the
 NodeGoat project:
@@ -102,17 +91,14 @@ Step 2 -- dependency check scan
 ===============================
 
 To execute the dependency-check, locate the
-[\\dependency-check\\bin\\] path. Execute the BAT under Windows or
-the SH under Linux. Refer to the following command for the WebGoat
+[\\dependency-check\\bin\\] path. Refer to the following command for the WebGoat
 project scan:
 
 
-To Do:
-
 ```
-dependency-check --project WebGoat --format XML --scan d:\tools\WebGoat
+dependency-check --project WebGoat --format XML --scan C:\Users\fenago\Desktop\DevSecOps-course\lab13\WebGoat
 
-dependency-check --project WebGoat --format HTML --scan d:\tools\WebGoat
+dependency-check --project WebGoat --format HTML --scan C:\Users\fenago\Desktop\DevSecOps-course\lab13\WebGoat
 ```
 
 
@@ -261,18 +247,11 @@ demonstrations.
 NMAP BDD with Robot Framework
 =============================
 
-In addition to Gauntlt, we will apply Robot Framework with NMAP in this
+We will apply Robot Framework with NMAP in this
 demonstration. Here are some of the key components to be used in this
 testing scenario:
 
-  ----------------------------------- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  **Robot Framework key component**   **Use in security testing scenario**
-  Run Process                         We will use **Run Process** to execute the security testing tools. Please be aware that the command options will require double spaces in the robot Framework scripts.
-  [\${result.stdout}]           [Run Process] will store all the output into this variable, which can be used to verify the test results.
-  Should Contain                      We should use \'Should Contain\' to verify the expected test results. In addition, Robot Framework provides other verification methods, such as \'Should Match\', \'Should be Equal\', \'Should End With\', and \'Should be Equal As Strings\'. Refer to the Robot Framework user guide \'BuiltIn\' libraries for details.
-  Log                                 Log is optional. We use \'Log\' to print the command execution results in the report. In our demonstration, this will be the NMAP console output results.
-  ----------------------------------- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+![](./images/s46.png)
 
 
 Step 1 -- define the Robot Framework steps
@@ -318,16 +297,10 @@ robot    nmap_NodeGoat.robot
 ```
 
 
-The following screenshot shows the test results for robot framework. It
-also generates HTML reports:
+The following screenshot shows the test results for robot framework. It also generates HTML reports:
 
 
 ![](./images/fbd7fc0f-5dcd-417d-b0b2-083ef84e0b33.png)
-
-
-
-
-Robot framework script execution
 
 
 Here is one of the Robot framework HTML reports, [log.html]:
