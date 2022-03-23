@@ -359,106 +359,28 @@ the necessary elements to complete the testing scenario. This table
 lists the use of JMeter elements in our case and also the configuration
 needed in each element:
 
-  --------------------- --------------------------------------------------------------------------------------------------------------------------------
-  **JMeter elements**   **Usage and scenarios**
-  HTTP Cookie Manager   It\'s used to maintain the authenticated cookie session after sign-in.
-  HTTP Header Manager   It\'s used to simulate browser behaviors with HTTP headers. We will apply the Chrome HTTP header in our case.
-  View Results          It\'s to review every HTTP request and response.
-  Response Assertion    The [Response Assertion] is included in every HTTP request to validate the HTTP request gets the expected HTTP response.
-  HTTP Request          It\'s used to send HTTP GET/POST requests to the target website.
-  CSV Data Set Config   It\'s used to read values from a CSV file.
-  --------------------- --------------------------------------------------------------------------------------------------------------------------------
+![](./images/s6.png)
 
 We will create a JMeter Script with the following configurations, and
 save the script as [NodeGoat.jmx]:
 
-+-----------------------------------+-----------------------------------+
-| **JMeter elements**               | **Configuration**                 |
-+-----------------------------------+-----------------------------------+
-| [HTTP Cookie                      | No need to do any configuration.  |
-| Manager]           |                                   |
-+-----------------------------------+-----------------------------------+
-| [HTTP Header                      | 
-| Manager]           | e-root .CDPAlignCenter .CDPAlign} |
-|                                   | ![](.                             |
-|                                   |./images/ad64a8bb-27b2-4b09- |
-|                                   | 9019-e13933b6b134.png) |
-|                                   | .size-full .wp-image-1114         |
-|                                   | .image-border}                    |
-|                                   | 
-+-----------------------------------+-----------------------------------+
-| [View Results                     | No need to do any configuration.  |
-| Tree]              |                                   |
-+-----------------------------------+-----------------------------------+
-| [HTTP Request - NodeGoat          | ![](.                             |
-| Sign]              |./images/213d0842-fb99-463d- |
-|                                   | 8b69-0491afb763bb.png) |
-|                                   | .size-full .wp-image-1097         |
-|                                   | .image-border}                    |
-+-----------------------------------+-----------------------------------+
-| [Response                         | Fields to test: Text response     |
-| Assertion]         |                                   |
-|                                   | Patterns to test: Employee        |
-|                                   | retirement savings management     |
-+-----------------------------------+-----------------------------------+
-| [HTTP Request --                  | ![](./images/bd976766       |
-| contributions]     | -6842-4970-b73a-bbdd1b441809.png) |
-+-----------------------------------+-----------------------------------+
-| [Response                         | Field to test: Text response      |
-| Assertion]         |                                   |
-|                                   | Patterns to test: Employee        |
-|                                   | pre-tax                           |
-+-----------------------------------+-----------------------------------+
-| [HTTP Request -                   | ![](./images/7887b8cc       |
-| Allocations]       | -365f-4920-9234-53ef1371427e.png) |
-+-----------------------------------+-----------------------------------+
-| [Response                         | Field to test: Text response      |
-| Assertion]         |                                   |
-|                                   | Patterns to test: Stock           |
-|                                   | performance                       |
-+-----------------------------------+-----------------------------------+
-| [HTTP Request -                   | ![](./images/b72b15a7       |
-| Memos]             | -b4c9-48a2-95cf-cc3bc1cecb61.png) |
-+-----------------------------------+-----------------------------------+
-| [Response                         | Field to test: Text response      |
-| Assertion]         |                                   |
-|                                   | Patterns to test: Send a memo     |
-+-----------------------------------+-----------------------------------+
-| [HTTP Request -                   | ![](./images/b668e06e       |
-| Profile]           | -e634-49be-8e85-c69d203cec60.png) |
-+-----------------------------------+-----------------------------------+
-| [Response                         | Field to test: Text response      |
-| Assertion]         |                                   |
-|                                   | Patterns to test: My profile      |
-+-----------------------------------+-----------------------------------+
-| [HTTP Request - Profile           | ![](./images/97d4bdaa       |
-| Update]            | -2669-444c-94e5-8cc9bf67e173.png) |
-+-----------------------------------+-----------------------------------+
-| [Response                         | Field to test: Text response      |
-| Assertion]         |                                   |
-|                                   | Patterns to test: Profile updated |
-|                                   | successfully                      |
-+-----------------------------------+-----------------------------------+
-| [HTTP Request --                  | ![](./images/0afe084c       |
-| Logou]                            | -d9f0-4526-a5a1-78ab4babad99.png) |
-| [t] |                                   |
-+-----------------------------------+-----------------------------------+
-| [Response                         | Field to test: Text response      |
-| Assertion]         |                                   |
-|                                   | Patterns to test: New user?       |
-+-----------------------------------+-----------------------------------+
+![](./images/j1.png)
 
+![](./images/j2.png)
 
+![](./images/j3.png)
+
+![](./images/j4.png)
 
 Step 3 -- prepare security payloads
 ===================================
 
-From the sources of FuzzDB, we will prepare two files [cmdi.csv]
+From the sources of FuzzDB, we will prepare two files `cmdi.csv`
 for the data input of profile update. In the JMeter script, [CSV Data
 Set Config] will be added with the following
 configuration:
 
--   [Filename]: [cmdi.csv]
+-   [Filename]: `cmdi.csv`
 -   [Variable Names (comma-delimited)]: [cmdi]
 
 This screenshot shows the JMeter script with [CSV Data Set
@@ -486,12 +408,11 @@ Profile Update]. For example, we replace the value of
 HTTP Request for Command Injection Testing in JMeter
 
 
-To do the loop and read all the variables in [cmdi.csv], we still
-need to change the [Loop Count] settings in [Thread
-Group]. For example, we will do the loop 10 times with
-each value in the [cmdi.csv]:
+To do the loop and read all the variables in `cmdi.csv`, we still
+need to change the [Loop Count] settings in [Thread Group]. For example, we will do the loop 10 times with
+each value in the `cmdi.csv`:
 
--   [Loop Count]: [10]
+- Loop Count: 10
 
 
 
@@ -572,62 +493,3 @@ Manager] is applied to manage the authenticated session.
 [HTTP Request] is used to send HTTP
 [POST]/[GET] requests to the website. Then, the JMeter
 script is executed in CLI mode with specified the proxy to OWASP ZAP.
-
-In Lab 12,
-*Automated Fuzz API Security Testing*, we will focus on fuzz API
-automation testing.
-
-
-
-
-
-
-
-
-
-
-
-
-Questions
-=========
-
-1.  What does Quick Scan do in OWASP ZAP?
-    1.  Opens a URL to the target website
-    2.  Spider scan
-    3.  Active scan
-    4.  All of the above
-2.  What element is used in JMeter to read a CSV file?
-    1.  CSV Data Set Config
-    2.  HTTP Cookie Manager
-    3.  HTTP Header Manager
-    4.  None of the above
-
-
-3.  Which element is used to maintain the sign-in session in Jmeter?
-    1.  HTTP Cookie Manager
-    2.  HTTP Header Manager
-    3.  HTTP Request
-    4.  Response Assertion
-4.  What are the benefits of integration ZAP with JMeter and selenium?
-    1.  To allow ZAP to scan authenticated web resources
-    2.  To control the security payloads with FuzzDB
-    3.  To simulate a normal user web operation
-    4.  All of the above
-5.  Which one is not correct about Selenium?
-    1.  Selenium will launch a browser for testing
-    2.  A Selenium script can also be executed without a browser in
-        headless mode
-    3.  Selenium testing will require the specific web driver for the
-        target browser
-    4.  All of the above are correct
-
-
-Further reading
-===============
-
--   **SeleniumBase**: <https://github.com/seleniumbase/SeleniumBase>
--   **JMeter**: [https://jmeter.apache.org](https://jmeter.apache.org/)
--   **Selenium**:
-    [https://www.seleniumhq.org](https://www.seleniumhq.org/)
--   **Robot Framework**:
-    [http://robotframework.org](http://robotframework.org/)

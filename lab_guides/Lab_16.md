@@ -57,7 +57,7 @@ The following table gives the description of files/scripts used:
 +-----------------------------------+-----------------------------------+
 | [sqli.csv]                  | Sample security data payloads     |
 |                                   | from the FuzzDB.                  |
-| [cmdi.csv]                  |                                   |
+| `cmdi.csv`                  |                                   |
 +-----------------------------------+-----------------------------------+
 | [UserRegistration.py]       | The Selenium Python script        |
 |                                   | demonstrates user registration    |

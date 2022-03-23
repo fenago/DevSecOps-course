@@ -215,14 +215,6 @@ details.
 
 
 
-
-
-
-
-
-
-
-
 NMAP security scan with BDD framework
 =====================================
 
@@ -249,44 +241,7 @@ history check, SQL injection check, and stored XSS check.
 This table lists the NMAP security testing scenario, the NSE script we
 will need, and the expected results:
 
-+-----------------------+-----------------------+-----------------------+
-| **NMAP security       | **NMAP NSE script and | **Expected results**  |
-| testing**             | scan**                |                       |
-+-----------------------+-----------------------+-----------------------+
-| Security header check | [nmap -p80 \--script  | [\"X-Frame-Options:   |
-|                       | http-security-headers | DENY\"]         |
-|                       | \<host\>]       |                       |
-+-----------------------+-----------------------+-----------------------+
-| HTTP slow DOS check   | [nmap -p80,443        | Should not contain    |
-|                       | \--script             | [\"LIKELY             |
-|                       | http-slowloris-check  | VULNERABLE\"]   |
-|                       | \<host\>]       |                       |
-+-----------------------+-----------------------+-----------------------+
-| SSL ciphers check     | [nmap                 | Should not contain    |
-|                       | \--sc                 | [\"SSL\"]       |
-|                       | ript=ssl-enum-ciphers |                       |
-|                       | \<host\>]       |                       |
-+-----------------------+-----------------------+-----------------------+
-| XSSed history check   | [nmap -p80 \--script  | Should return [\"No   |
-|                       | http-xssed.nse        | previously reported   |
-|                       | \<host\>]\      | XSS vuln\"]     |
-+-----------------------+-----------------------+-----------------------+
-| SQL injection check   | [nmap -sV             | Should not return     |
-|                       | \--scri               | [\"Possible sqli      |
-|                       | pt=http-sql-injection | for\"]          |
-|                       | \<host\>]\      |                       |
-+-----------------------+-----------------------+-----------------------+
-| Stored XSS check      | [nmap -p80 \--script  | Should return         |
-|                       | http-stored-xss.nse   | [\"Couldn\'t find any |
-|                       | \<host\>]       | stored XSS            |
-|                       |                       | vul                   |
-|                       |                       | nerabilities\"] |
-+-----------------------+-----------------------+-----------------------+
-
-NMAP NSE scripts can be downloaded here:
-[https://svn.nmap.org/nmaps/scripts/\<NSE script name\>]. For
-example, the security header check NSE is at
-<https://svn.nmap.org/nmap/scripts/http-security-headers.nse>.
+![](./images/3.png)
 
 The [-oX] option can be used to generate the output in an
 XML-format file:
@@ -397,71 +352,6 @@ encryption keys, and weak HSA or encryption algorithms.
 
 We also illustrated how NMAP NSE can be used to do basic web security
 inspections such as XSS and SQL injection. An NMAP security scan with
-the integration of Gauntlt and Robot Framework was also demonstrated.
+the integration of Robot Framework was also demonstrated.
 BDD testing techniques can help to make infrastructure security testing
 easier to understand and can even be maintained by a non-security team.
-
-
-
-
-
-
-
-
-
-
-
-
-Questions
-=========
-
-1.  Which one best describes the purpose of RetireJS?
-    1.  Detect known vulnerable JavaScript libraries
-    2.  Scan for XSS
-    3.  Scan for SQL injection issues
-    4.  Scan for JavaScript security coding issues
-2.  To interpret the SSLScan results, what kind of connection should we
-    focus on
-    1.  Accepted
-    2.  Rejected
-    3.  Failed
-    4.  Disconnected
-3.  Which of the following is an indicator of a weak HTTPS
-    configuration?
-    1.  The use of SSL v2 or v3
-    2.  The use of MD5 hashing
-    3.  The RSA key is smaller than 1024 bits
-    4.  All of the above
-4.  What can an NMAP NSE script do for web security testing?
-    1.  Security header check
-    2.  HTTP slow DoS check
-    3.  SQL injection
-    4.  All of the above
-5.  What keywords are used to integrate NMAP with Robot Framework?
-    1.  Run process
-    2.  Should contain
-    3.  [{result.stdout}]
-    4.  All of the above
-
-
-
-
-
-
-
-
-
-
-
-
-Further reading
-===============
-
--   **RetireJS**: <https://retirejs.github.io/retire.js/>
--   **Security/Server Side TLS**:
-    <https://wiki.mozilla.org/Security/Server_Side_TLS>
--   **NMAP NSE Index**: <https://nmap.org/nsedoc/index.html>
--   **Robot Framework User Guide**:
-    [http://robotframework.org/robotframework/latest/libraries/BuiltIn.html\#Should%20Be](http://robotframework.org/robotframework/latest/libraries/BuiltIn.html#Should%20Be%20Equal)
--   **WebMAP for** **NMAP reporting**:
-    <https://github.com/Rev3rseSecurity/WebMap>
