@@ -80,7 +80,7 @@ Step 2 -- use JADX to reverse the APK into Java source code
 ===========================================================
 
 This will reverse the APK into Java source code. Then, we can do static
-secure code scanning in the next setup. Launch `jadx-gui-1.3.4.exe` located in **Desktop** folder to start Jadx GUI:
+secure code scanning in the next setup. Launch `jadx-gui-1.3.4.exe` located in **Desktop\DevSecOps-course\lab07** folder to start Jadx GUI:
 
 ![](./images/s38.png)
 
